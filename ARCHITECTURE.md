@@ -3,12 +3,15 @@
 How `pexip-infinity-skills` is laid out and why. Read this if you're contributing a skill or reorganizing existing ones.
 
 This package is the **umbrella** Agent Skills SDK for the Pexip Infinity
-platform. Today it covers the server-side surface (management/admin APIs,
-events, dial plan, room integration, external policy). A future revision
-will absorb client-side content (currently at
-[awesome-pexip-skills](https://github.com/Josh-E-S/awesome-pexip-skills))
-under `skills/client/`. The package is host-agnostic — Claude Code,
-Gemini CLI, Codex CLI, Cursor, Kiro, or any compliant host can load it.
+platform. It covers both the **server-side** surface (management/admin
+APIs, events, dial plan, room integration, external policy, operator
+runbooks) under domain folders such as `skills/operations/`,
+`skills/management-api/`, etc., and the **client-side** surface under
+`skills/client/` (`@pexip/infinity` + `@pexip/media` SDKs, webapp
+embedding, plugins, branding manifests, CVI, layouts, breakouts, …).
+
+The package is host-agnostic — Claude Code, Gemini CLI, Codex CLI,
+Cursor, Kiro, or any compliant host can load it.
 
 ## Design principles
 
@@ -42,7 +45,7 @@ pexip-infinity-skills/
 │   ├── events/                   # Event sinks / webhooks
 │   ├── policy/                   # External Policy API
 │   ├── room-integration/         # MJX / room systems
-│   └── client/                   # Reserved — future absorption of awesome-pexip-skills
+│   └── client/                   # Client SDK / webapp / branding / plugins (17 skills)
 ├── recipes/                      # Multi-skill workflows
 └── scripts/                      # Repo-wide tooling (install, scaffolder, validator, hygiene)
 ```
@@ -156,7 +159,7 @@ Every SKILL.md ends with a section pointing at:
 1. The **authoritative Pexip doc URL** for the API surface this skill covers (required).
 2. A **reference implementation** (optional): typically the matching file in the [`pexip-mgmt-mcp`](https://github.com/Josh-E-S/pexip-mgmt-mcp) server (e.g., `src/pexip_mcp/tools/conference.py`). Cite this only where a reference implementation exists. Direct REST callers can read the same source as a worked example.
 
-This pattern is borrowed from [awesome-pexip-skills](https://github.com/Josh-E-S/awesome-pexip-skills). Lets a human (or another agent) verify the skill against ground truth quickly.
+This footer lets a human (or another agent) verify the skill against ground truth quickly.
 
 ## Recipes vs. skills
 
@@ -180,20 +183,33 @@ Pattern borrowed from Google Workspace's [50 curated recipes](https://github.com
 
 Run it before pushing changes.
 
-## Relationship to awesome-pexip-skills
+## Client-side vs. server-side organization
 
-[awesome-pexip-skills](https://github.com/Josh-E-S/awesome-pexip-skills) is
-the existing client-side Pexip skills package (webapp, client SDK, CVI,
-branding). It uses a flat `skills/` layout. This umbrella package will
-eventually absorb that content under `skills/client/`; until then, the two
-repos coexist and the `pexip-intake` router will send client-side
-questions to the awesome-pexip-skills repo.
+Skills under `skills/client/` describe how to build or customize the
+**meeting experience** itself — `@pexip/infinity` and `@pexip/media`
+SDK usage, webapp embedding, branding manifests, plugins, CVI, layouts,
+breakouts, chat, etc. These live as a flat set inside `skills/client/`
+rather than being further split by sub-domain, because the client SDK
+is one coherent surface (signals + services + view components) and
+authors are usually moving between them.
 
-The umbrella's domain folders pre-organize for the merged scope —
-per-resource skills (`pexip-vmrs`, `pexip-end-users`, …), new domains
-(`pexip-cvi-teams`, `pexip-branding-manifest`), and the future
-`skills/client/` half.
+Skills under `skills/operations/`, `skills/management-api/`,
+`skills/events/`, `skills/policy/`, and `skills/room-integration/`
+describe the **deployment side** — operating, configuring, monitoring,
+and extending a Pexip Infinity platform via its admin APIs. These are
+grouped by domain because the API surface is large and the audiences
+(operator vs. developer-wrapping-the-API) are distinct.
 
-Everything else (sibling-file disclosure, three-field frontmatter,
-"Reference source" footer, intake-style router) matches the conventions
-in awesome-pexip-skills so the two packages feel like sister volumes.
+Both halves share the same conventions: sibling-file disclosure,
+three-field frontmatter, "Reference source" footer with mandatory
+Pexip docs URL, intake-style routers (one server-side, one client-side).
+
+The two intake routers cooperate:
+
+- `pexip-intake` is the top-level router. Its first question is
+  "server side or client side?".
+- If client → it loads `pexip-client-intake`, which scopes the
+  client-side work (webapp vs. custom SDK vs. branding vs. CVI vs. …)
+  and routes to the right `skills/client/pexip-*` skill.
+- If server → it asks the existing server-side scoping questions
+  and routes to the right tier-2 skill.

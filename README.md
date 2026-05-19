@@ -5,10 +5,14 @@ package for [Pexip Infinity](https://www.pexip.com/products/infinity-platform)**
 Drop it into any compliant skills host to give that host concrete,
 current knowledge about Pexip — both **server-side** (admin APIs,
 events, dial plan, external policy, room integration, operator
-runbooks) and **client-side** (`@pexip/infinity` + `@pexip/media` SDKs,
-webapp embedding, plugins, branding, CVI). Useful for building
+runbooks) and **web client-side** (TypeScript / React with
+`@pexip/infinity` + `@pexip/media` and the rest of the `@pexip/*` SDK
+family, webapp embedding, plugins, branding, CVI). Useful for building
 applications, answering questions, debugging a deployment, or running
 live operator workflows.
+
+Native mobile and desktop clients (iOS / Android / Electron / …) use
+separate Pexip SDKs and are not yet covered here — see Roadmap.
 
 It's **host-agnostic**: works in Claude Code, Gemini CLI, Codex CLI,
 Cursor, Kiro, or anything else that reads the open Agent Skills
@@ -60,9 +64,18 @@ host's config — see Prerequisites below.
 | **pexip-external-policy** | policy | developer — external policy server hooks for per-call decisions |
 | **pexip-mjx** | room-integration | both — MJX / One-Touch Join for in-room video systems |
 
-### Client-side (`skills/client/`)
+### Client-side (`skills/client/`) — web (TypeScript + React)
 
-For building or customizing the **meeting experience** itself — webapp embedding, custom clients with `@pexip/infinity` + `@pexip/media`, branding, plugins, CVI.
+For building or customizing the **web meeting experience** — embedding
+or extending webapp3, building custom web clients with Pexip's
+JavaScript SDK (`@pexip/infinity`, `@pexip/media`, `@pexip/signal`,
+`@pexip/components`, `@pexip/plugin-api`, …), branding manifests,
+plugins, and CVI.
+
+> **Scope note:** these skills cover Pexip's **web client surface only
+> (TypeScript / React, browser runtime)**. Native iOS / Android /
+> desktop / Electron clients use different SDKs and are not yet
+> covered in this package — see the Roadmap.
 
 | Skill | Audience |
 |---|---|
@@ -228,13 +241,18 @@ plenty of room to grow:
 - [ ] Per-resource granular skills (`pexip-vmrs`, `pexip-end-users`, `pexip-gateway-rules`, `pexip-ldap-sync`, `pexip-licensing`, `pexip-alarms`, `pexip-conferencing-nodes`)
 - [ ] New server-side domains: `pexip-cvi-teams`, `pexip-infrastructure-commands`
 
-**Client-side**
+**Client-side — web (TypeScript / React)**
 
 - [x] SDK foundation (signals, call lifecycle, media pipeline, preflight, reconnect)
 - [x] Meeting features (chat, participants, presentation, breakouts, layouts, live captions, FECC)
 - [x] Integration & polish (branding manifest, plugin host, stats monitoring, browser close)
-- [ ] Deeper coverage for native and embed clients (iOS / Android / desktop)
 - [ ] More CVI-specific skills for Teams / Webex / Zoom interop
+
+**Client-side — native (not yet covered)**
+
+- [ ] iOS SDK (Swift / Objective-C)
+- [ ] Android SDK (Kotlin / Java)
+- [ ] Desktop / Electron embed
 
 Contributions welcome. See `CONTRIBUTING.md`.
 

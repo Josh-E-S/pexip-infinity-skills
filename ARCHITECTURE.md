@@ -6,9 +6,16 @@ This package is the **umbrella** Agent Skills SDK for the Pexip Infinity
 platform. It covers both the **server-side** surface (management/admin
 APIs, events, dial plan, room integration, external policy, operator
 runbooks) under domain folders such as `skills/operations/`,
-`skills/management-api/`, etc., and the **client-side** surface under
-`skills/client/` (`@pexip/infinity` + `@pexip/media` SDKs, webapp
-embedding, plugins, branding manifests, CVI, layouts, breakouts, …).
+`skills/management-api/`, etc., and the **web client-side** surface
+under `skills/client/` — Pexip's JavaScript SDK family
+(`@pexip/infinity`, `@pexip/media`, `@pexip/signal`,
+`@pexip/components`, `@pexip/plugin-api`, …) used in TypeScript / React
+to embed webapp3, build custom web clients, plugins, branding
+manifests, CVI, layouts, breakouts, etc.
+
+Native mobile and desktop client SDKs (iOS, Android, Electron) are
+**not yet covered** in this package — they use separate Pexip SDKs.
+They're on the roadmap; see `README.md`.
 
 The package is host-agnostic — Claude Code, Gemini CLI, Codex CLI,
 Cursor, Kiro, or any compliant host can load it.
@@ -186,12 +193,21 @@ Run it before pushing changes.
 ## Client-side vs. server-side organization
 
 Skills under `skills/client/` describe how to build or customize the
-**meeting experience** itself — `@pexip/infinity` and `@pexip/media`
-SDK usage, webapp embedding, branding manifests, plugins, CVI, layouts,
-breakouts, chat, etc. These live as a flat set inside `skills/client/`
-rather than being further split by sub-domain, because the client SDK
-is one coherent surface (signals + services + view components) and
-authors are usually moving between them.
+**web meeting experience** in TypeScript / React using Pexip's JS SDK
+family — `@pexip/infinity`, `@pexip/media`, `@pexip/signal`,
+`@pexip/components`, `@pexip/plugin-api`, `@pexip/media-components`,
+`@pexip/media-processor`, etc. — for webapp embedding, custom web
+clients, branding manifests, plugins, CVI, layouts, breakouts, chat,
+and so on. These live as a flat set inside `skills/client/` rather
+than being further split by sub-domain, because the client SDK is one
+coherent surface (signals + services + view components) and authors
+are usually moving between them.
+
+**Runtime in scope:** browser (the SDK family is JavaScript / TypeScript
+with React for UI integration). **Out of scope today:** native iOS
+(Swift), native Android (Kotlin / Java), desktop (Electron and others).
+Native mobile / desktop are different Pexip SDKs and would warrant their
+own `skills/client/<native>/` set if added later.
 
 Skills under `skills/operations/`, `skills/management-api/`,
 `skills/events/`, `skills/policy/`, and `skills/room-integration/`

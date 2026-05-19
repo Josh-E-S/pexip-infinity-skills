@@ -1,0 +1,56 @@
+# --- Local agent / editor scratch (never committed) -------------------------
+# Anything Claude or other AI agents leave behind locally. This repo is
+# public; these files routinely contain brainstorming, internal context,
+# unredacted hostnames, customer names, or secrets pasted in for analysis.
+CLAUDE.md
+CLAUDE_NOTES*
+CLAUDE.local.md
+AGENTS.md
+GEMINI.md
+.claude/
+.gemini/
+.cursor/
+.codex/
+.continue/
+.aider*
+.windsurfrules
+
+# Brainstorming / design / internal notes pulled in during exploration
+*.brainstorm.md
+*.scratch.md
+notes/internal/
+notes/private/
+docs/superpowers/
+
+# --- Secrets / credentials --------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+credentials.json
+service-account*.json
+*.kdbx
+
+# --- OS / editor noise ------------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# --- Python (validate-skills.py + future helpers) ---------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# --- Misc -------------------------------------------------------------------
+*.log
+.tmp/
+tmp/

@@ -1,0 +1,52 @@
+# pre-commit config for pexip-infinity-skills (public repo).
+#
+# Philosophy: fast hooks (so no one wants to --no-verify), focused on what
+# matters for a *public, content-heavy* repo — secret/PII leaks, agent
+# attribution scrubbing, and basic file hygiene. Skill validation runs in CI,
+# not here, to keep the local loop snappy.
+#
+# Install once after cloning:  pre-commit install --hook-type pre-commit \
+#                                                 --hook-type commit-msg
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-json
+      - id: check-added-large-files
+        args: [--maxkb=512]
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: block-internal-markers
+        name: Block Claude / internal-notes markers
+        entry: scripts/hygiene/block-internal-markers.sh
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: scan-pii
+        name: Scan for emails on non-allowlisted domains and public IPs
+        entry: scripts/hygiene/scan-pii.sh
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: forbid-ai-attribution-in-msg
+        name: Forbid AI-attribution lines in commit message
+        entry: scripts/hygiene/check-commit-msg.sh
+        language: system
+        stages: [commit-msg]

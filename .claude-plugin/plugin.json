@@ -1,0 +1,20 @@
+{
+  "name": "pexip-infinity-skills",
+  "description": "Agent Skills for the Pexip Infinity platform — operator runbooks and developer reference for the management admin APIs (Configuration / Status / History / Command), event sinks, external policy, and room integration. Works in any Agent Skills host (Claude Code, Gemini CLI, Codex CLI, Cursor, Kiro, …). This can be paired with the pexip-mgmnt MCP server at https://github.com/Josh-E-S/pexip-mgmt-mcp for ready-made tools, or call the same Pexip REST endpoints directly from your own code.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Josh Estrada"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/Josh-E-S/pexip-infinity-skills",
+  "keywords": [
+    "pexip",
+    "pexip-infinity",
+    "pexip-management-api",
+    "agent-skills",
+    "mcp",
+    "video-conferencing",
+    "vmr",
+    "cdr"
+  ]
+}

@@ -2,10 +2,13 @@
 
 `pexip-infinity-skills` is the **umbrella [Agent Skills](https://agentskills.io)
 package for [Pexip Infinity](https://www.pexip.com/products/infinity-platform)**.
-Drop it into any compliant skills host to give that host concrete, current
-knowledge about Pexip's admin APIs, events, dial plan, external policy,
-and room integration — useful for building applications, answering
-questions, debugging a deployment, or running live operator workflows.
+Drop it into any compliant skills host to give that host concrete,
+current knowledge about Pexip — both **server-side** (admin APIs,
+events, dial plan, external policy, room integration, operator
+runbooks) and **client-side** (`@pexip/infinity` + `@pexip/media` SDKs,
+webapp embedding, plugins, branding, CVI). Useful for building
+applications, answering questions, debugging a deployment, or running
+live operator workflows.
 
 It's **host-agnostic**: works in Claude Code, Gemini CLI, Codex CLI,
 Cursor, Kiro, or anything else that reads the open Agent Skills
@@ -31,7 +34,7 @@ pexip-infinity-skills/
 │   ├── events/                   Event sinks + webhook patterns
 │   ├── policy/                   External Policy API
 │   ├── room-integration/         MJX / One-Touch Join
-│   └── client/                   Reserved — see Roadmap below
+│   └── client/                   Client SDK / webapp / branding / plugins (17 skills)
 ├── recipes/                      Multi-skill workflows ready to run
 └── scripts/                      Install / validate / scaffold / hygiene
 ```
@@ -39,11 +42,15 @@ pexip-infinity-skills/
 There is **no `.mcp.json`** at the repo root. Users wire MCP via their own
 host's config — see Prerequisites below.
 
-## Skill index (v0.1.0)
+## Skill index
+
+**26 skills across server-side and client-side domains.**
+
+### Server-side (`skills/_intake`, `operations`, `management-api`, `events`, `policy`, `room-integration`)
 
 | Skill | Domain | Audience |
 |---|---|---|
-| **pexip-intake** | router | both — start here for open-ended "I want to use Pexip" requests, server-side or client-side |
+| **pexip-intake** | router | both — start here for open-ended "I want to use Pexip" requests; routes server- or client-side |
 | **pexip-operations** | operations | operator — kick / lock / report / configure / health-check |
 | **pexip-config-api** | management-api | developer — Configuration admin API (CRUD on VMRs, dial plan, locations, end-users, …) |
 | **pexip-status-api** | management-api | developer — Status admin API (live conferences, participants, node load, alarms) |
@@ -53,7 +60,29 @@ host's config — see Prerequisites below.
 | **pexip-external-policy** | policy | developer — external policy server hooks for per-call decisions |
 | **pexip-mjx** | room-integration | both — MJX / One-Touch Join for in-room video systems |
 
-`skills/client/` is **reserved** (see Roadmap).
+### Client-side (`skills/client/`)
+
+For building or customizing the **meeting experience** itself — webapp embedding, custom clients with `@pexip/infinity` + `@pexip/media`, branding, plugins, CVI.
+
+| Skill | Audience |
+|---|---|
+| **pexip-client-intake** | both — start here for open-ended client-side requests |
+| **pexip-signals-pattern** | developer — `@pexip/signal` pub/sub architecture, when to add a signal hub vs use React state |
+| **pexip-call-lifecycle** | developer — `createInfinityClient`, join flows (PIN/IDP/extension/host-vs-guest), ICE restart, transfers |
+| **pexip-media-pipeline** | developer — `createMedia` + audio/video processors, denoise, blur, audio mixing, self-healing tracks |
+| **pexip-preflight** | developer — device enumeration, permission UX, mic/camera test, blocked-permission screens |
+| **pexip-reconnect** | developer — `NetworkState` coordination, toast-spam suppression, `onFailedRequest` |
+| **pexip-chat** | developer — group + direct messages, optimistic UI, retry-queue reconciliation, character limit |
+| **pexip-participants** | developer — `GroupKey` filters, mute/kick/admit, host/guest sorting, batched activity |
+| **pexip-presentation** | developer — screen sharing, content hints, audio mixing, ICE-restart preservation |
+| **pexip-breakouts** | developer — open/edit/close rooms, auto vs manual assignment, ask-for-help, guest tokens |
+| **pexip-layouts** | developer — host vs personal layouts, lecture-mode guest layout, presentation-in-mix detection |
+| **pexip-branding-manifest** | developer — `manifest.json` loading, color palette, hidden functionality, custom step iframe |
+| **pexip-plugin-host** | developer — `@pexip/plugin-api`, sandboxed iframes, panel widgets, toolbar buttons |
+| **pexip-stats-monitoring** | developer — `onRtcStats`, `qualityLimitationReason`, `fpsVolatility`, call-quality UI |
+| **pexip-browser-close-confirmation** | developer — `beforeunload` wiring, "Are you sure you want to leave?" prompt |
+| **pexip-live-captions** | developer — real-time transcription overlay, interim vs final, auto-clear timer, breakout reset |
+| **pexip-fecc** | developer — far-end camera control (PTZ), capability detection, currently-controlling tracking |
 
 See `ARCHITECTURE.md` for the design rules. See `CONTRIBUTING.md` for how
 to add a skill and the public-repo hygiene policy enforced by pre-commit
@@ -183,8 +212,10 @@ as runbooks.
 
 ## Roadmap
 
-This package aims to cover **every Pexip Infinity admin and platform API**
-plus events, and then absorb the client-side surface today. Current state:
+The package covers both server-side and client-side surface today, with
+plenty of room to grow:
+
+**Server-side**
 
 - [x] Configuration API — high-level + 4 dev-reference skills
 - [x] Status API
@@ -195,8 +226,15 @@ plus events, and then absorb the client-side surface today. Current state:
 - [ ] External Policy API (stub)
 - [ ] MJX / One-Touch Join (stub)
 - [ ] Per-resource granular skills (`pexip-vmrs`, `pexip-end-users`, `pexip-gateway-rules`, `pexip-ldap-sync`, `pexip-licensing`, `pexip-alarms`, `pexip-conferencing-nodes`)
-- [ ] New server-side domains: `pexip-cvi-teams`, `pexip-branding-manifest`, `pexip-infrastructure-commands`
-- [ ] **Absorb [awesome-pexip-skills](https://github.com/Josh-E-S/awesome-pexip-skills)** into `skills/client/` (client SDK, webapp embed, CVI, branding)
+- [ ] New server-side domains: `pexip-cvi-teams`, `pexip-infrastructure-commands`
+
+**Client-side**
+
+- [x] SDK foundation (signals, call lifecycle, media pipeline, preflight, reconnect)
+- [x] Meeting features (chat, participants, presentation, breakouts, layouts, live captions, FECC)
+- [x] Integration & polish (branding manifest, plugin host, stats monitoring, browser close)
+- [ ] Deeper coverage for native and embed clients (iOS / Android / desktop)
+- [ ] More CVI-specific skills for Teams / Webex / Zoom interop
 
 Contributions welcome. See `CONTRIBUTING.md`.
 
@@ -209,10 +247,6 @@ Contributions welcome. See `CONTRIBUTING.md`.
   Wraps Pexip's four admin APIs as MCP tools. If you want ready-made
   tools instead of writing your own REST client, install this alongside
   the skills.
-- [**awesome-pexip-skills**](https://github.com/Josh-E-S/awesome-pexip-skills)
-  — client-side Pexip skills (`@pexip/infinity`, `@pexip/media`, webapp
-  embedding, CVI, branding). Will eventually be absorbed into
-  `skills/client/` here; until then, the two packages are companions.
 
 ---
 

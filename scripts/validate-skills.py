@@ -14,6 +14,7 @@ Rules (see spec/pexip-conventions.md):
      user-invocable, when_to_use, shell).
   7. Body must end with a "Reference source" or "Authoritative docs" section.
   8. Body should be under 500 lines (warn at 250).
+  9. Relative-path markdown links in any skill or recipe markdown must resolve.
 
 Exit code: 0 = no errors (warnings are informational), 2 = errors.
 Pass `--strict` to treat warnings as exit-1 (useful for opt-in CI gates).
@@ -44,6 +45,7 @@ HOST_SPECIFIC_KEYS = {
 DESCRIPTION_HARD_CAP = 1024  # open Agent Skills spec
 DESCRIPTION_WARN_CAP = 800   # internal margin
 BODY_LINES_HARD_CAP = 500
+LINK_RE = re.compile(r"\[(?P<text>[^\]]+)\]\((?P<href>[^)]+)\)")
 BODY_LINES_WARN = 250
 NAME_RE = re.compile(r"^pexip-[a-z0-9]+(-[a-z0-9]+)*$")
 
@@ -145,6 +147,26 @@ def check(skill_md: Path) -> tuple[list[str], list[str]]:
     return errors, warnings
 
 
+def check_links(md_path: Path, root: Path) -> list[str]:
+    """Rule 9: verify every relative-path markdown link resolves."""
+    errors: list[str] = []
+    text = md_path.read_text(encoding="utf-8")
+    for m in LINK_RE.finditer(text):
+        href = m.group("href").strip()
+        # Skip external URLs, anchor-only refs, mailto, and inline-code-with-paren noise.
+        if href.startswith(("http://", "https://", "mailto:", "#")):
+            continue
+        target_path = href.split("#", 1)[0].split("?", 1)[0]
+        if not target_path:
+            continue
+        target = (md_path.parent / target_path).resolve()
+        if not target.exists():
+            errors.append(
+                f"{md_path.relative_to(root)}: broken link → {href}"
+            )
+    return errors
+
+
 def main() -> int:
     strict = "--strict" in sys.argv[1:]
     root = Path(__file__).resolve().parent.parent
@@ -173,9 +195,24 @@ def main() -> int:
             print(f"WARN {rel}: {w}")
             total_warnings += 1
 
+    # Rule 9: link check across every markdown file in the repo.
+    # Covers SKILL.md sibling docs, recipes, README, ARCHITECTURE, etc.
+    link_targets = sorted(
+        set(skills_dir.rglob("*.md"))
+        | set((root / "recipes").glob("*.md") if (root / "recipes").is_dir() else [])
+        | {p for p in root.glob("*.md")}
+    )
+    link_errors_total = 0
+    for md in link_targets:
+        for e in check_links(md, root):
+            print(f"ERR  {e}")
+            link_errors_total += 1
+            total_errors += 1
+
     print()
     print(
-        f"{len(skill_files)} skill(s) checked. "
+        f"{len(skill_files)} skill(s) checked, "
+        f"{len(link_targets)} markdown file(s) link-checked. "
         f"{total_errors} error(s), {total_warnings} warning(s)."
     )
     if total_errors:

@@ -26,7 +26,7 @@ Keep it brief. Most management tasks resolve in 2-3 questions.
 - Live operator verbs: "kick Alice", "lock the AllHands" → answer with `pexip-operations`
 - Specific tool questions: "how do I call `summarize_calls`?" → answer with `pexip-operations`
 - Specific endpoint questions: route to the matching `pexip-*-api` developer-reference skill
-- Specific client-side questions ("how do I add a Pexip widget to my React app"): route to the [awesome-pexip-skills](https://github.com/Josh-E-S/awesome-pexip-skills) package directly
+- Specific client-side questions ("how do I add a Pexip widget to my React app"): route to `pexip-client-intake` or the matching `skills/client/pexip-*` skill
 
 ## The minimum questions
 
@@ -47,10 +47,10 @@ C) Both / not sure yet — usually a full-stack feature
 Routing:
 
 - **A** → continue with Q1 below (this skill handles server-side routing)
-- **B** → point the user at the companion package
-  [awesome-pexip-skills](https://github.com/Josh-E-S/awesome-pexip-skills).
-  Client-side content will eventually be absorbed into `skills/client/` in this
-  umbrella package; until then, that repo is the authoritative source.
+- **B** → load `pexip-client-intake` (under `skills/client/`). It asks the
+  webapp / SDK / branding / CVI scoping questions and routes to the matching
+  client skill (`pexip-call-lifecycle`, `pexip-media-pipeline`,
+  `pexip-signals-pattern`, `pexip-preflight`, `pexip-chat`, etc.).
 - **C** → ask which half they want to start with; usually server side first
   (the client doesn't have anything to talk to until the deployment exists)
 
@@ -224,6 +224,6 @@ Plan:
 
 ## Reference source
 
-- Pattern borrowed from: https://github.com/Josh-E-S/awesome-pexip-skills/blob/main/skills/project-intake/SKILL.md (client-side equivalent)
 - Authoritative Pexip docs: https://docs.pexip.com/api_manage/management_intro.htm
-- Related skills: `pexip-operations`, `pexip-config-api`, `pexip-status-api`, `pexip-history-api`, `pexip-command-api`, `pexip-event-sinks`, `pexip-mjx`
+- Client-side counterpart router: `pexip-client-intake`
+- Related skills (server-side): `pexip-operations`, `pexip-config-api`, `pexip-status-api`, `pexip-history-api`, `pexip-command-api`, `pexip-event-sinks`, `pexip-external-policy`, `pexip-mjx`

@@ -2,6 +2,48 @@
 
 All notable changes to this package. Follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.2.0] — 2026-05-19
+
+Adds client-side coverage under `skills/client/` — the package now spans
+both server-side (admin APIs, events, dial plan, policy, room
+integration) and client-side (webapp embedding, custom clients with
+`@pexip/infinity` + `@pexip/media`, branding, plugins, CVI).
+
+### Added (skills)
+
+17 new client-side skills under `skills/client/`:
+
+- `pexip-client-intake` — client-side scoping router; routed to from
+  `pexip-intake`'s server-vs-client question.
+- SDK foundation: `pexip-signals-pattern`, `pexip-call-lifecycle`,
+  `pexip-media-pipeline`, `pexip-preflight`, `pexip-reconnect`.
+- Meeting features: `pexip-chat`, `pexip-participants`,
+  `pexip-presentation`, `pexip-breakouts`, `pexip-layouts`,
+  `pexip-live-captions`, `pexip-fecc`.
+- Integration & polish: `pexip-branding-manifest`, `pexip-plugin-host`,
+  `pexip-stats-monitoring`, `pexip-browser-close-confirmation`.
+
+### Changed
+
+- `pexip-intake`'s Q0 (server side vs. client side) now routes
+  client-side requests inward to `pexip-client-intake` instead of
+  pointing at an external package.
+- `README.md` skill index split into server-side and client-side
+  tables; tree diagram and Roadmap updated to reflect the 26-skill
+  state.
+- `ARCHITECTURE.md` describes both halves and how the two intake
+  routers cooperate.
+- `scripts/validate-skills.py` gains link checking — every relative-path
+  markdown link across SKILL.md sibling docs, recipes, and root docs is
+  verified to resolve. Existing rules (frontmatter shape, name match,
+  description hard-cap of 1,024 chars per the open spec, body-length
+  ceiling, mandatory Reference source footer) carry over.
+
+### Package size
+
+- v0.1.0: 9 skills, 5 recipes.
+- v0.2.0: **26 skills**, 5 recipes.
+
 ## [0.1.0] — 2026-05-19
 
 Initial public release of `pexip-infinity-skills` as the umbrella

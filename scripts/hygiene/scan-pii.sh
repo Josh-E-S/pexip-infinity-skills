@@ -14,13 +14,29 @@
 set -euo pipefail
 
 email_allow_domains=(
+  # RFC 2606 reserved documentation domains
   'example.com' 'example.org' 'example.net'
+  # First-party
   'pexip.com'
   'localhost'
+  # Well-known third-party conferencing / SIP platforms commonly
+  # documented as dial-plan endpoints. These are public meeting URI
+  # formats published by their vendors, not customer identifiers.
+  'webex.com'
+  'lync.com'
+  'teams.microsoft.com'
+  'zoom.us'
+  'zoomcrc.com'
+  'bjn.vc'
+  'goto.com'
 )
 
-# Build the email allowlist regex once.
-allow_re="@($(IFS='|'; echo "${email_allow_domains[*]}"))\\b"
+# Build the email allowlist regex. Match the allowlisted domains AND any
+# subdomain of them (e.g. meet.example.com, recording.example.com). The
+# trailing $|[^.] anchor stops a partial match like "example.com.evil.io"
+# from sneaking through.
+allow_alt="$(IFS='|'; echo "${email_allow_domains[*]}")"
+allow_re="@([A-Za-z0-9.-]+\\.)?(${allow_alt})([^.A-Za-z0-9-]|\$)"
 
 # IPv4 ignore regex: RFC 1918 / loopback / link-local / TEST-NET-1/2/3 / multicast / broadcast / 0.x
 ip_ignore_re='^(10\.|127\.|169\.254\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.0\.2\.|198\.51\.100\.|203\.0\.113\.|2(2[4-9]|3[0-9])\.|255\.255\.255\.255|0\.)'

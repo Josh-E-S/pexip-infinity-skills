@@ -1,0 +1,8 @@
+# Pinned upstream commit of anthropics/skills used by scripts/run-evals.sh.
+# Bump deliberately; do not auto-update. Audit the diff before bumping —
+# the harness invokes `claude -p` as a subprocess and we run it against
+# every skill in this repo.
+#
+# Upstream: https://github.com/anthropics/skills
+# Path used: skills/skill-creator/scripts/
+690f15cac7f7b4c055c5ab109c79ed9259934081

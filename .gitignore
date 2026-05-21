@@ -50,6 +50,13 @@ __pycache__/
 venv/
 .pytest_cache/
 
+# --- Eval harness (pinned upstream clone + per-skill iteration outputs) -----
+# scripts/run-evals.sh clones anthropics/skills at a pinned SHA into .cache/
+# and writes iteration results into a sibling *-workspace/ next to each skill.
+# Both are reproducible from evals/evals.json — don't pollute history.
+.cache/
+*-workspace/
+
 # --- Misc -------------------------------------------------------------------
 *.log
 .tmp/

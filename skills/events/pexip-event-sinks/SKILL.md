@@ -1,6 +1,6 @@
 ---
 name: pexip-event-sinks
-description: Use when configuring or extending Pexip's event sink push API — register webhook URLs Pexip POSTs conference / participant / call lifecycle events to, build the receiver side of that contract, correlate events into call records, move from polling the History API to a push-based pipeline. Triggers on `event_sink`, `/api/admin/configuration/v1/event_sink/`, `list_event_sinks`, `create_event_sink`, `update_event_sink`, `delete_event_sink`, `eventsink_started`, `eventsink_bulk`, `participant_connected`, `participant_disconnected`, `participant_media_stream_window`, `participant_media_streams_destroyed`, `conference_started`, `conference_ended`, `bulk_support`, `webhook`, "Pexip events", "push events", "real-time CDR", "event collector". Do NOT use for one-off live state reads (use `pexip-status-api` / `pexip-operations`) or post-call CDR pulls (use `pexip-history-api`).
+description: Real-time Pexip Infinity event delivery — Pexip POSTs conference, participant, and call lifecycle events to a webhook URL you configure. Use this skill whenever the user asks about Pexip events, server-sent events, SSE, real-time notifications, getting notified when calls or conferences start or end, streaming call detail records as they happen instead of polling, or building anything that reacts to Pexip activity. Also use for ANY question about whether a room system, endpoint, or codec can react to / respond to / receive / consume Pexip events — Cisco (RoomOS, codec, macro), Poly (endpoint, Trio, Studio), Crestron, Q-SYS, Logitech, or any vendor that runs a script or receives HTTP — including terse feasibility questions like "Poly endpoint reacting to Pexip events — possible?" or "can my Cisco codec do X when Pexip Y?". Covers browser or mobile apps that surface call notifications, real-time dashboards, SIEM and observability pipelines, and CDR collectors. Use even when the user calls it "SSE" or "server-sent events" (Pexip is webhook POST, not SSE — the skill covers the correction). Also use for configuring the sink or building the HTTP receiver. Do NOT use for live state reads, operational commands on running conferences, post-call history pulls, or client-side in-browser SDK events.
 license: MIT
 ---
 
@@ -252,6 +252,58 @@ Either way:
 - A minimal FastAPI / Flask / Cloud Function receiver
 - An idempotent queue write
 - A reconciliation job that fills gaps from the History API
+
+## Integration targets
+
+The receiver can be anything that accepts an HTTP POST. Pexip publishes
+first-party recipes for two endpoint families; the rest are "anything
+that runs a script or accepts a webhook" (per Pexip's own framing).
+
+### Cisco room systems
+
+Pexip ships official macros for Cisco RoomOS endpoints — Layout
+Controls and Meeting Controls. Requires **RoomOS 11+** on current
+gear, or **CE9.13+** on older MX / SX / DX / Room Kit. The macros run
+on the codec itself (JavaScript runtime, `xCommand` / `xEvent` /
+`xStatus` surface) and either consume Pexip events directly via HTTPClient
+or proxy them through a small server-side bridge. ERM (Enhanced Room
+Management), which historically provisioned these macros, went
+End-of-Sale 2026-03-06 — new deployments wire macros via the codec's
+own management surface or Cisco Webex Control Hub.
+
+- Macro framework: https://docs.pexip.com/admin/integrate_macros.htm
+- Layout macro: https://docs.pexip.com/macros/layouts-macro.htm
+- Meeting controls macro: https://docs.pexip.com/macros/meeting-controls-macro.htm
+
+### Poly room systems
+
+Poly Studio X, G7500, and Trio devices support similar control
+surfaces. Pexip's published macros target the same control verbs as
+the Cisco set but via Poly's REST and device-control APIs.
+
+### Other endpoints / codecs
+
+For Crestron, Q-SYS, Logitech, Yealink, Lifesize, Sony, Avaya, etc.,
+Pexip doesn't publish dedicated macros — but anything that can receive
+HTTP and execute logic (a Crestron program, a Q-SYS Lua script, a
+panel controller hitting a REST endpoint) can consume the same webhook
+stream. Build a thin server-side bridge that subscribes to the sink
+and translates events into the vendor's native control protocol.
+
+### Browser / mobile / dashboards / SIEM
+
+The webhook is generic HTTP — common downstream targets include:
+
+- **Browser** notification panels (push events to a WebSocket / SSE
+  proxy on the receiver side, since the browser cannot accept inbound
+  POST directly)
+- **Mobile** alerters via APNs / FCM, triggered by the receiver
+- **Dashboards** (Grafana, Datadog, Kibana) fed from the dedup'd
+  event stream
+- **SIEM** pipelines (Splunk HEC, Elastic, Sentinel) ingesting the
+  raw envelope
+- **CDR collectors** built around `conference_started` /
+  `conference_ended` / `participant_*` events
 
 ## Field gotchas
 

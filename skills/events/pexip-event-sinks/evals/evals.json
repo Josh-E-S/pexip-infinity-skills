@@ -1,0 +1,87 @@
+[
+  {
+    "query": "How can I subscribe to Pexip SSEs?",
+    "should_trigger": true,
+    "note": "positive — common misconception (it's webhooks, not SSE); skill should still trigger and correct"
+  },
+  {
+    "query": "What are Pexip events?",
+    "should_trigger": true,
+    "note": "positive — bare orientation question, how a new admin first asks"
+  },
+  {
+    "query": "Can I tie my Cisco or Poly endpoint or room system into Pexip events?",
+    "should_trigger": true,
+    "note": "positive — room-system integration framing, real admin vocabulary"
+  },
+  {
+    "query": "Make me a Cisco macro that reacts to Pexip server-sent events.",
+    "should_trigger": true,
+    "note": "positive — receiver-building task with non-docs phrasing"
+  },
+  {
+    "query": "Build a web app that alerts me when calls start and end on Pexip.",
+    "should_trigger": true,
+    "note": "positive — app-builder task, no Pexip jargon at all"
+  },
+  {
+    "query": "How do I create a notification panel in my app from Pexip events?",
+    "should_trigger": true,
+    "note": "positive — receiver-side dev task"
+  },
+  {
+    "query": "I need real-time call records from Pexip, not a nightly pull. What should I use?",
+    "should_trigger": true,
+    "note": "positive — symptom-led, the canonical 'move from polling' story in user words"
+  },
+  {
+    "query": "Set up Pexip to POST conference start and end notifications to our webhook URL.",
+    "should_trigger": true,
+    "note": "positive — task-oriented, names webhook but not the API resource"
+  },
+  {
+    "query": "Pull yesterday's call detail records from Pexip.",
+    "should_trigger": false,
+    "note": "negative — post-call CDR pull, belongs to pexip-history-api"
+  },
+  {
+    "query": "How many participants are connected to conference 'sales-allhands' right now?",
+    "should_trigger": false,
+    "note": "negative — one-off live state read, belongs to pexip-status-api"
+  },
+  {
+    "query": "Disconnect participant abc-123 from the conference.",
+    "should_trigger": false,
+    "note": "negative — live operational command, belongs to pexip-operations"
+  },
+  {
+    "query": "How do I listen for participant join events in my Pexip web client using the JS SDK?",
+    "should_trigger": false,
+    "note": "negative — client-side SDK events (in-browser), belongs to pexip-call-lifecycle / pexip-participants under skills/client/, not the server-side webhook sink"
+  },
+  {
+    "query": "Can I have my Cisco codec do something when a Pexip call starts?",
+    "should_trigger": true,
+    "note": "positive — brand+codec phrasing, event-reactive"
+  },
+  {
+    "query": "Poly endpoint reacting to Pexip events — possible?",
+    "should_trigger": true,
+    "note": "positive — Poly brand + endpoint surface"
+  },
+  {
+    "query": "I want my room system to mute when a Pexip conference ends.",
+    "should_trigger": true,
+    "note": "positive — generic 'room system' + event-driven verb"
+  },
+  {
+    "query": "Write me a Cisco RoomOS macro that reacts to Pexip conference_started.",
+    "should_trigger": true,
+    "note": "positive — exact vendor surface (RoomOS) + named event"
+  },
+  {
+    "query": "How do I register a Cisco endpoint with Pexip so users can dial in from it?",
+    "should_trigger": false,
+    "note": "negative — endpoint registration / dial-plan question, not event-driven; belongs to a future call-control / registration skill"
+  }
+]

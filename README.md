@@ -235,7 +235,7 @@ plenty of room to grow:
 - [x] History API
 - [x] Command API
 - [x] Operator runbook
-- [ ] Event sinks (stub — flesh out webhook receiver patterns)
+- [x] Event sinks (fleshed out webhook receiver patterns)
 - [ ] External Policy API (stub)
 - [ ] MJX / One-Touch Join (stub)
 - [ ] Per-resource granular skills (`pexip-vmrs`, `pexip-end-users`, `pexip-gateway-rules`, `pexip-ldap-sync`, `pexip-licensing`, `pexip-alarms`, `pexip-conferencing-nodes`)

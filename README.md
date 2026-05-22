@@ -1,7 +1,7 @@
 # pexip-infinity-skills
 
 [![CI](https://github.com/Josh-E-S/pexip-infinity-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/Josh-E-S/pexip-infinity-skills/actions/workflows/ci.yml)
-[![License](https://img.shields.io/github/license/Josh-E-S/pexip-infinity-skills)](https://github.com/Josh-E-S/pexip-infinity-skills/blob/main/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/Josh-E-S/pexip-infinity-skills/blob/main/LICENSE)
 [![Agent Skills Compatible](https://img.shields.io/badge/Agent_Skills-compatible-blue)](https://agentskills.io)
 
 `pexip-infinity-skills` is the **umbrella [Agent Skills](https://agentskills.io)

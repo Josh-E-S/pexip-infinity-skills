@@ -1,76 +1,138 @@
 ---
 name: pexip-external-policy
-description: Use when building or extending Pexip's External Policy Server integration — a custom HTTP service Pexip Infinity consults at call setup to make routing, authentication, or admission decisions that go beyond the built-in dial plan. Triggers on `external_policy_server`, `/api/admin/configuration/v1/external_policy_server/`, `policy_request`, `service_lookup`, `participant_avatar_lookup`, `participant_properties_lookup`, "external policy", "policy server", "custom call routing", "per-call decisions", "dynamic VMR". Do NOT use for static dial-plan rules (use `pexip-config-api` / `pexip-operations/dial-plan.md`) or for runtime command/control (use `pexip-command-api`).
+description: Build and extend Pexip's External Policy Server integration — a custom HTTP service Pexip Infinity consults at call setup to make routing, authentication, or admission decisions. Triggers on `external_policy_server`, `/api/admin/configuration/v1/external_policy_server/`, `policy_request`, `service_lookup`, `participant_properties_lookup`, "external policy", "policy server", "custom call routing". Do NOT use for static dial-plan rules (use `pexip-operations/dial-plan.md`) or runtime commands (use `pexip-command-api`).
 license: MIT
 ---
 
-# Pexip external policy server
+# Pexip External Policy Server
 
-The **External Policy API** lets Pexip Infinity outsource per-call decisions to an HTTP service you run. At well-defined hook points (call setup, service lookup, avatar lookup, participant property lookup), Pexip POSTs a request to your endpoint and applies the JSON response — overriding or augmenting the static dial plan.
+The **External Policy API** allows Pexip Infinity Conferencing Nodes to outsource call-routing, authentication, and admission control decisions to an external HTTP service. When enabled, Pexip queries your policy server at call setup and applies the returned rules, bypassing or augmenting Pexip's internal configuration database.
 
-Use it when the answer to "where should this call go?" depends on data Pexip doesn't have: your CRM, scheduling system, real-time capacity heuristics, custom auth, dynamic VMRs per booking, etc.
+## Quick reference
 
-> **Status: stub.** This skill is a placeholder for the next round of coverage. The Pexip External Policy API is real and supported, but the `pexip-mgmt-mcp` server does **not** currently wrap the `external_policy_server` resource. Adding it is on the roadmap (see `CHANGELOG.md` / parent repo's `TODO.md`).
+- **Protocol**: HTTP/HTTPS (HTTPS recommended for production)
+- **Method**: `GET` (Conferencing Nodes query the server using URL parameters)
+- **Timeout**: 5 seconds (non-configurable). A timeout or non-200 response triggers local fallback.
+- **Mutual TLS**: Supported by uploading client/server CA certificates.
+- **Base Response Wrapper**:
+  ```json
+  {
+    "status": "success",
+    "action": "continue|reject|redirect",
+    "result": { ... }
+  }
+  ```
 
-## When to use
+---
 
-- "Build a dynamic VMR per calendar invite" (booking system → VMR creation on demand)
-- "Authenticate calls against our SSO before allowing join"
-- "Route calls to the lowest-loaded location at the moment of dial"
-- "Inject custom branding / display names per call"
-- Adding `external_policy_server` CRUD tools to the MCP server
+## Hook points & URI paths
 
-## When NOT to use
+### 1. Service Configuration
+* **URI Path**: `GET /policy/v1/service/configuration`
+* **Triggered**: When an incoming call arrives or Pexip needs to dial out.
+* **Key Request Parameters**: `local_alias`, `remote_alias`, `protocol` (sip, h323, webrtc, api), `call_direction` (dial_in, dial_out, non_dial), `bandwidth`, `node_ip`, `location`.
+* **Actions**:
+  - `continue`: Look up the alias in Pexip's local database.
+  - `reject`: Block the call immediately (returns "conference not found").
+  - `redirect`: Redirect endpoints using SIP 302. Returns `"result": {"new_alias": "sip:redirect-target@example.com"}`.
+* **Result Payload (on success)**: Replaces/sets properties of the target service (VMR, Gateway, etc.):
+  ```json
+  {
+    "status": "success",
+    "action": "continue",
+    "result": {
+      "name": "Dynamic VMR",
+      "service_type": "conference",
+      "service_uuid": "12345678-abcd-1234-abcd-1234567890ab",
+      "pin": "1234",
+      "guest_pin": "5678",
+      "allow_guests": true,
+      "description": "Dynamically routed room"
+    }
+  }
+  ```
 
-- Static dial plan with regex matching → `pexip-config-api` (`gateway_routing_rule`) / `pexip-operations/dial-plan.md`
-- Persistent VMRs configured ahead of time → `pexip-operations/vmr-administration.md`
-- Runtime kick/lock/mute → `pexip-command-api`
+### 2. Participant Properties
+* **URI Path**: `GET /policy/v1/participant/properties`
+* **Triggered**: Applied before a participant joins the conference. For WebRTC, this runs *after* PIN entry/SSO, giving access to Identity Provider metadata.
+* **Result Payload**: Allows modifying display name, role, or media limits:
+  ```json
+  {
+    "status": "success",
+    "result": {
+      "display_name": "Anonymized Guest",
+      "role": "guest",
+      "service_name": "Conf-123",
+      "rx_presentation_policy": "ALLOW"
+    }
+  }
+  ```
 
-## Hook points (high-level)
+### 3. Media Location
+* **URI Path**: `GET /policy/v1/participant/location`
+* **Triggered**: During call setup to determine which system location handles participant media.
+* **Key Request Parameters**: `remote_alias`, `local_alias`, `protocol`, `node_ip`.
+* **Result Payload**:
+  ```json
+  {
+    "status": "success",
+    "result": {
+      "location": "Dallas-Data-Center"
+    }
+  }
+  ```
 
-The Pexip External Policy API defines several request types. Pexip POSTs JSON to your endpoint with the request type and call context; you return JSON describing the decision.
+### 4. Registration Alias
+* **URI Path**: `GET /policy/v1/registrations/<alias>`
+* **Triggered**: When an endpoint attempts to register with Pexip.
+* **Actions**:
+  - `continue`: Let Pexip match registration credentials against local configuration.
+  - `reject`: Deny registration immediately.
+* **Result Payload**:
+  ```json
+  {
+    "status": "success",
+    "action": "continue"
+  }
+  ```
 
-| Hook | When fired | Typical use |
-|---|---|---|
-| `service_lookup` | A call arrives and Pexip needs to find/create the service it joins | Dynamic VMR creation, per-booking conferences |
-| `participant_lookup` | Participant identity needs verification | SSO / external auth integration |
-| `participant_avatar_lookup` | Need an avatar URL for a participant | Pull from your directory |
-| `participant_properties_lookup` | Need custom properties (display name overrides, role, location) | Per-call branding |
+### 5. Directory Information
+* **URI Path**: `GET /policy/v1/registrations`
+* **Triggered**: When Pexip apps request phonebook/directory contact data.
+* **Result Payload**:
+  ```json
+  {
+    "status": "success",
+    "result": {
+      "contacts": [
+        { "name": "Main Office VMR", "alias": "main-office@example.com" },
+        { "name": "IT Support VMR", "alias": "it-support@example.com" }
+      ]
+    }
+  }
+  ```
 
-Exact request/response schemas vary across Pexip Infinity versions — **read the authoritative doc** before implementing. Pexip ships canned examples for each hook.
+### 6. Participant Avatar
+* **URI Path**: `GET /policy/v1/participant/avatar/<alias>`
+* **Triggered**: When Pexip needs to retrieve an image representation for a participant or directory contact.
+* **Response Requirements**: Returns the binary payload directly with a `Content-Type` of `image/jpeg` or `image/png`. Returning a `404 Not Found` will cause Pexip to fall back to the default local user avatar.
 
-## Receiver-side contract
+---
 
-Same general shape as event sinks but synchronous:
+## Gotchas and constraints
 
-1. **Accept POST**, return **200** with a JSON body shaped per Pexip's spec.
-2. **Be fast.** Pexip blocks the call setup waiting for your response — multi-second latency is a user-visible "slow to connect" issue.
-3. **Be deterministic** for testability. Pexip retries on 5xx but not on 4xx; idempotency-by-input is the easiest contract.
-4. **TLS auth.** Pexip can present a client cert; configure mutual TLS if you need to verify the request really came from your Management Node.
-
-## Configuration (when MCP coverage lands)
-
-Future tools (not yet implemented in the server):
-
-```
-list_external_policy_servers(…)
-create_external_policy_server(name=…, url=…, ssl_cert=…, …)
-update_external_policy_server(…)
-delete_external_policy_server(…)
-```
-
-Until then: configure via Pexip's admin UI under **Call Control → External Policy** and consult the doc.
-
-## Field gotchas (anticipated, verify when implementing)
-
-- Policy server responses can include URIs to dynamically created configuration objects — make sure your creator side responds with valid URIs Pexip can parse.
-- The policy server is in the synchronous path of call setup; outages cause join failures. Always have a fallback (e.g. fall through to static dial plan).
-- Pexip versions before v30 had some response-schema deltas around service properties; if you support older deployments, branch on version.
+- **Synchronous Call Blocking**: The policy server is in the synchronous call path. The 5-second timeout exists to prevent call locks. Your policy server must respond within milliseconds to ensure a smooth user setup experience.
+- **Fail-Safe Fallback**: If your policy server goes offline, Pexip automatically falls back to its local database lookup. Ensure that fallback dial-plan rules are configured locally in Pexip for critical calls.
+- **Field Limit**: All strings inside the JSON `result` block are capped at a maximum of 250 characters.
+- **Client redirects**: Pexip does **not** follow HTTP 301/302 redirects returned by the policy server. All responses from the policy server must use the status code `200 OK` (with the exception of returning 404 for avatar fallbacks).
 
 ## Reference source
 
 - **Authoritative Pexip docs:**
   - External policy overview: https://docs.pexip.com/admin/external_policy.htm
+  - Requests/responses schema: https://docs.pexip.com/admin/external_policy_requests.htm
   - API reference: https://docs.pexip.com/api_manage/api_external_policy.htm
-- **Reference implementation (MCP):** _not yet implemented_ — could be added to [`pexip-mgmt-mcp`](https://github.com/Josh-E-S/pexip-mgmt-mcp) as `src/pexip_mcp/tools/external_policy.py` per the existing pattern. Until then, call the REST endpoints directly.
-- **Related skills:** `pexip-config-api` (existing resource model), `pexip-operations/dial-plan.md` (the static-rule alternative), `pexip-event-sinks` (the push-event sibling)
+- **Related skills:**
+  - Config API: [pexip-config-api](../../management-api/pexip-config-api/SKILL.md)
+  - Dial plan: `pexip-operations/dial-plan.md`
+  - Event webhooks: [pexip-event-sinks](../../events/pexip-event-sinks/SKILL.md)

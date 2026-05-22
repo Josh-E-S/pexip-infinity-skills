@@ -1,0 +1,42 @@
+[
+  {
+    "query": "Configure One-Touch Join for Cisco endpoints using Google Workspace.",
+    "should_trigger": true,
+    "note": "positive — standard setup query for MJX calendar integration"
+  },
+  {
+    "query": "Why isn't the Join button showing up on our Webex Room Kit panels?",
+    "should_trigger": true,
+    "note": "positive — common troubleshooting symptom for OTJ"
+  },
+  {
+    "query": "Set up a regex processing rule to parse Zoom meetings in MJX.",
+    "should_trigger": true,
+    "note": "positive — rule-based configuration task"
+  },
+  {
+    "query": "How do I sync Outlook/Office 365 resource mailboxes with Pexip OTJ?",
+    "should_trigger": true,
+    "note": "positive — Office 365 calendar configuration query"
+  },
+  {
+    "query": "Graph API permissions needed for Pexip calendar integration.",
+    "should_trigger": true,
+    "note": "positive — authorization scope question for O365 integration"
+  },
+  {
+    "query": "Write a Cisco macro to lower the blinds in the room when a call starts.",
+    "should_trigger": false,
+    "note": "negative — local RoomOS macro script for environment control, belongs to room-integration"
+  },
+  {
+    "query": "Mute a room codec using the Poly REST API.",
+    "should_trigger": false,
+    "note": "negative — direct hardware control command, belongs to room-integration"
+  },
+  {
+    "query": "How can I pull historical CDR logs for Room A?",
+    "should_trigger": false,
+    "note": "negative — historical reporting, belongs to pexip-history-api"
+  }
+]

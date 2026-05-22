@@ -1,0 +1,47 @@
+[
+  {
+    "query": "How do I configure a custom call routing policy server for Pexip?",
+    "should_trigger": true,
+    "note": "positive — standard setup request for external policy"
+  },
+  {
+    "query": "Set up dynamic routing for VMRs using Pexip external policy API.",
+    "should_trigger": true,
+    "note": "positive — core use case of the service/configuration hook"
+  },
+  {
+    "query": "Authenticate participant properties or roles via an external REST API at call setup.",
+    "should_trigger": true,
+    "note": "positive — participant properties hook query"
+  },
+  {
+    "query": "What is the endpoint for registration alias policy lookup?",
+    "should_trigger": true,
+    "note": "positive — registration alias lookup query"
+  },
+  {
+    "query": "Can I assign a specific media location dynamically using a policy server?",
+    "should_trigger": true,
+    "note": "positive — media location hook query"
+  },
+  {
+    "query": "How does the participant avatar lookup hook work in external policy?",
+    "should_trigger": true,
+    "note": "positive — avatar lookup hook query"
+  },
+  {
+    "query": "Show me how to run a report on participant history in the last 24 hours.",
+    "should_trigger": false,
+    "note": "negative — historical reporting, belongs to pexip-history-api"
+  },
+  {
+    "query": "Create a new VMR using the management API.",
+    "should_trigger": false,
+    "note": "negative — configuration management CRUD, belongs to pexip-config-api"
+  },
+  {
+    "query": "Mute a participant who is currently in a call.",
+    "should_trigger": false,
+    "note": "negative — runtime meeting command, belongs to pexip-command-api"
+  }
+]

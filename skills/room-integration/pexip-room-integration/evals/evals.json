@@ -1,0 +1,42 @@
+[
+  {
+    "query": "Can I tie my Cisco or Poly endpoint or room system into Pexip events?",
+    "should_trigger": true,
+    "note": "positive — room-system integration framing, real admin vocabulary"
+  },
+  {
+    "query": "Make me a Cisco macro that reacts to Pexip server-sent events.",
+    "should_trigger": true,
+    "note": "positive — receiver-building task with non-docs phrasing"
+  },
+  {
+    "query": "Can I have my Cisco codec do something when a Pexip call starts?",
+    "should_trigger": true,
+    "note": "positive — brand+codec phrasing, event-reactive"
+  },
+  {
+    "query": "Poly endpoint reacting to Pexip events — possible?",
+    "should_trigger": true,
+    "note": "positive — Poly brand + endpoint surface"
+  },
+  {
+    "query": "I want my room system to mute when a Pexip conference ends.",
+    "should_trigger": true,
+    "note": "positive — generic 'room system' + event-driven verb"
+  },
+  {
+    "query": "Write me a Cisco RoomOS macro that reacts to Pexip conference_started.",
+    "should_trigger": true,
+    "note": "positive — exact vendor surface (RoomOS) + named event"
+  },
+  {
+    "query": "How do I configure Google Workspace One-Touch Join for my rooms?",
+    "should_trigger": false,
+    "note": "negative — calendar integration / OTJ, belongs to pexip-mjx"
+  },
+  {
+    "query": "How do I build a Python webhook collector for event sinks?",
+    "should_trigger": false,
+    "note": "negative — server-side event collection receiver, belongs to pexip-event-sinks"
+  }
+]

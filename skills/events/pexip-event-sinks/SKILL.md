@@ -1,6 +1,6 @@
 ---
 name: pexip-event-sinks
-description: Real-time Pexip Infinity event delivery — Pexip POSTs conference, participant, and call lifecycle events to a webhook URL you configure. Use this skill whenever the user asks about Pexip events, server-sent events, SSE, real-time notifications, getting notified when calls or conferences start or end, streaming call detail records as they happen instead of polling, or building anything that reacts to Pexip activity. Also use for ANY question about whether a room system, endpoint, or codec can react to / respond to / receive / consume Pexip events — Cisco (RoomOS, codec, macro), Poly (endpoint, Trio, Studio), Crestron, Q-SYS, Logitech, or any vendor that runs a script or receives HTTP — including terse feasibility questions like "Poly endpoint reacting to Pexip events — possible?" or "can my Cisco codec do X when Pexip Y?". Covers browser or mobile apps that surface call notifications, real-time dashboards, SIEM and observability pipelines, and CDR collectors. Use even when the user calls it "SSE" or "server-sent events" (Pexip is webhook POST, not SSE — the skill covers the correction). Also use for configuring the sink or building the HTTP receiver. Do NOT use for live state reads, operational commands on running conferences, post-call history pulls, or client-side in-browser SDK events.
+description: Real-time Pexip Infinity event delivery — Pexip POSTs conference, participant, and call lifecycle events to a webhook URL you configure. Use this skill for questions about Pexip events, server-sent events (SSE), real-time notifications, getting notified when calls or conferences start or end, streaming call detail records (CDR) as they happen, or building an HTTP webhook receiver. Covers browser/mobile apps surfacing call notifications, real-time dashboards, and SIEM pipelines. Use even when the user calls it "SSE" (Pexip uses webhook POSTs, not SSE). Also use for configuring sinks. Do NOT use for live state reads, operational commands, post-call history queries, client-side in-browser SDK events, or hardware/endpoint room integrations (Cisco macros, Poly Trio, Q-SYS, Crestron).
 license: MIT
 ---
 
@@ -98,114 +98,11 @@ Every event Pexip POSTs has the same outer shape:
 - **`event`** — event name (see catalog below).
 - **`data`** — event-specific payload; see `events-reference.md` for full schemas.
 
-## Event catalog
+## Event types and schemas
 
-Three groups plus a bulk wrapper.
+For detailed definitions of the event payload fields and JSON examples for conference, participant, and media-stream events, see [events-reference.md](events-reference.md).
 
-### Event sink lifecycle
-
-| Event | When |
-|---|---|
-| `eventsink_started` | A sink starts on this node |
-| `eventsink_updated` | A sink's configuration changes |
-| `eventsink_stopped` | A sink stops (deleted, or node shutdown) |
-
-`data` is empty `{}` — these are just timestamps so you can detect
-gaps and resets.
-
-### Conference lifecycle
-
-| Event | When |
-|---|---|
-| `conference_started` | A conference instance starts on this node |
-| `conference_updated` | A conference property changes (lock, mute-all, etc.) |
-| `conference_ended` | A conference instance ends on this node |
-
-**Multi-node duplication — important.** A single logical conference can produce
-**multiple `conference_started` / `conference_ended` events from
-different nodes** as participants join and leave each node. Correlate
-by the `name` field across nodes. Anyone counting conferences by raw
-`conference_started` count will overcount.
-
-### Participant lifecycle
-
-| Event | When | Version |
-|---|---|---|
-| `participant_connected` | Participant joins | v1 + v2 |
-| `participant_updated` | Participant property changes (role, mute, presentation, …) | v1 + v2 |
-| `participant_media_stream_window` | Call quality changes between windows (e.g. good→bad) | **v2 only** |
-| `participant_disconnected` | Participant disconnects (call signaling) | v1 + v2 |
-| `participant_media_streams_destroyed` | Participant's media streams end (separate from signaling) | **v2 only** |
-
-In **v1**, end-of-call media stats are folded into
-`participant_disconnected` as a `media_streams` array. In **v2**, media
-stats are emitted as a separate `participant_media_streams_destroyed`
-event so disconnect signaling and media tear-down can be timed
-independently. **v2 is preferred** for any analytics that depends on
-media-stream timing.
-
-### Bulk wrapper
-
-When `bulk_support=True`, Pexip groups events at an interval and POSTs
-them as one message:
-
-```json
-{
-  "event": "eventsink_bulk",
-  "node": "127.0.0.1",
-  "seq": 0,
-  "version": 2,
-  "time": 1741679796.951206,
-  "data": [
-    { "event": "participant_updated", "node": "10.44.34.14", "seq": 2183, …  },
-    { "event": "participant_updated", "node": "10.44.34.14", "seq": 2184, …  }
-  ]
-}
-```
-
-Detection: `node == "127.0.0.1"` and `event == "eventsink_bulk"`. Each
-inner entry has its own real `node` and `seq`. **Always handle both
-shapes** in the receiver — even with `bulk_support=True` Pexip may send
-single events under load.
-
-## Correlation: how to assemble a call record
-
-Three identifiers, each for a different correlation level:
-
-| Field | Correlates… | Stable across… |
-|---|---|---|
-| `uuid` | One participant event back to its participant | All events for that participant |
-| `call_id` | Messages from the same call leg | All events for that call leg |
-| `conversation_id` | Audio + video + presentation + chat for one logical participant | The whole logical participant's media graph |
-| `related_uuids` | Sibling participant events (e.g. main A/V vs presentation stream) | At a point in time |
-
-A "logical participant" — Alice in a meeting — can produce **multiple
-`uuid`s** at the protocol level: one for her A/V leg, another for the
-presentation she shares, possibly another for chat. To rebuild Alice's
-full record, walk `related_uuids` from one of her events to find the
-others, then group by `conversation_id`.
-
-Practical rule of thumb:
-- Need "events for this call leg"? → `call_id`
-- Need "everything Alice did in this meeting"? → `conversation_id`
-- Need "which events are siblings of this one right now"? → `related_uuids`
-
-## Quality scoring enum (referenced from many events)
-
-In `participant_media_stream_window.recent_quality[].*`:
-
-| Field | Values |
-|---|---|
-| `quality` / `audio` / `video` / `presentation` / `applicationsharing` | `null` (not in use), `0` (Unknown), `1` (Good), `2` (OK), `3` (Bad), `4` (Terrible) |
-| `call_quality_was` / `call_quality_now` | String: `"0_unknown"`, `"1_good"`, `"2_ok"`, `"3_bad"`, `"4_terrible"` |
-
-The number-vs-string split is intentional — the per-window samples use
-integers (compact), the transition markers use strings (self-describing
-for log lines).
-
-`participant_disconnected.disconnect_reason` is a free-text string but
-the values come from a known enum. See
-`pexip-operations/disconnect-reasons.json` for the catalog.
+For correlation guidelines (e.g., matching `conversation_id` vs `call_id`) and quality score enums, consult the reference file as well.
 
 ## Receiver side
 
@@ -254,41 +151,9 @@ Either way:
 - A reconciliation job that fills gaps from the History API
 
 ## Integration targets
-
-The receiver can be anything that accepts an HTTP POST. Pexip publishes
-first-party recipes for two endpoint families; the rest are "anything
-that runs a script or accepts a webhook" (per Pexip's own framing).
-
-### Cisco room systems
-
-Pexip ships official macros for Cisco RoomOS endpoints — Layout
-Controls and Meeting Controls. Requires **RoomOS 11+** on current
-gear, or **CE9.13+** on older MX / SX / DX / Room Kit. The macros run
-on the codec itself (JavaScript runtime, `xCommand` / `xEvent` /
-`xStatus` surface) and either consume Pexip events directly via HTTPClient
-or proxy them through a small server-side bridge. ERM (Enhanced Room
-Management), which historically provisioned these macros, went
-End-of-Sale 2026-03-06 — new deployments wire macros via the codec's
-own management surface or Cisco Webex Control Hub.
-
-- Macro framework: https://docs.pexip.com/admin/integrate_macros.htm
-- Layout macro: https://docs.pexip.com/macros/layouts-macro.htm
-- Meeting controls macro: https://docs.pexip.com/macros/meeting-controls-macro.htm
-
-### Poly room systems
-
-Poly Studio X, G7500, and Trio devices support similar control
-surfaces. Pexip's published macros target the same control verbs as
-the Cisco set but via Poly's REST and device-control APIs.
-
-### Other endpoints / codecs
-
-For Crestron, Q-SYS, Logitech, Yealink, Lifesize, Sony, Avaya, etc.,
-Pexip doesn't publish dedicated macros — but anything that can receive
-HTTP and execute logic (a Crestron program, a Q-SYS Lua script, a
-panel controller hitting a REST endpoint) can consume the same webhook
-stream. Build a thin server-side bridge that subscribes to the sink
-and translates events into the vendor's native control protocol.
+The receiver can be anything that accepts an HTTP POST. If you are integrating
+hardware video endpoints or room systems (Cisco RoomOS, Poly Trio, Crestron,
+Q-SYS, Logitech), see the dedicated [pexip-room-integration](../../room-integration/pexip-room-integration/SKILL.md) skill.
 
 ### Browser / mobile / dashboards / SIEM
 

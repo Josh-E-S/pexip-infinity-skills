@@ -146,6 +146,14 @@ Fields: `alias` (required), `conference` (FK), `description`, `protocol` (`sip`,
 - **Schema enums are case-sensitive.** Send `"conference"`, not `"Conference"`.
 - **Some fields are write-only** (e.g. `password`, `pin`) — GETs return them as `null` or omit them. Don't treat absence as "field was unset".
 - **Booleans in query filters** must be `True` / `False` (capitalized) in some Pexip versions. Test before relying on it.
+- **Device Registration Alias Endpoint Field Names**: The `/device/` API endpoint expects properties named `alias`, `description`, `username`, `password`, and `tag` (NOT prefixed with `device_`, which is common in YAML configuration files).
+- **Gateway Routing Rule choices**:
+  - `crypto_mode` must be exactly `besteffort` (without underscore), `on`, or `off`.
+  - `called_device_type` for Microsoft Teams Guest routing must be `teams_conference` (not `teams`).
+- **Global Policy constraints (e.g. PIN Length)**: The Management Node may enforce global security rules (like a minimum PIN length of 6 digits). Creating VMRs with shorter PINs will throw a `400 Bad Request` validation error.
+- **VMR Layouts (`guest_view`/`host_view`) Idempotency Loop**: In VMR responses, fields like `guest_view` or `host_view` may return as `null`/`None` from the API even after being successfully set (due to certain service types or licenses). When comparing local configuration to the server, treat an existing `null`/`None` as matching the desired layout value to prevent infinite PATCH loops on successive sync runs.
+- **IPv4 Static NAT Address Update Post-Bootstrap**: A Conferencing Node's static NAT address (`static_nat_address`) can be configured or updated dynamically post-bootstrap by sending a `PATCH` request to the `/api/admin/configuration/v1/worker_vm/<id>/` endpoint.
+- **Unlicensed Management Node Restrictions**: Querying `/api/admin/configuration/v1/licence/` returns an empty `objects` array if unlicensed. Unlicensed/trial systems will throw `400 Bad Request` validation errors if you try to POST/PATCH Virtual Meeting Rooms (VMRs) or Microsoft Teams-specific gateway routing rules (`called_device_type: "teams_conference"` or `outgoing_protocol: "teams"`). Check license status at runtime and conditionally skip these configuration steps with a clear log message to let basic configuration sync succeed.
 
 ## MCP tool design notes
 

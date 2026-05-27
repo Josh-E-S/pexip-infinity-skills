@@ -164,6 +164,11 @@ The `delete` + `set` pattern reorders the Map so the most-recent conversation is
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/services/InfinityClient.service.ts:835-889` — `sendMessage` with reconciliation
 - `src/services/InfinityClient.service.ts:1114-1144` — `handleOnChatMessage` receive flow
 - `src/services/InfinityClient.service.ts:469-538` — direct-message bucket management

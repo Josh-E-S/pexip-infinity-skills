@@ -213,6 +213,11 @@ const handleAudioMute = createDebounceMute(
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/utils/createParticipants.ts` — the full implementation (~1,200 LOC)
 - `src/utils/participantSearcher.ts` — fuzzy search (uses `@leeoniya/ufuzzy`)
 - `src/utils/createReversedMapSet.ts`, `createReversedMapObject.ts` — bi-directional maps

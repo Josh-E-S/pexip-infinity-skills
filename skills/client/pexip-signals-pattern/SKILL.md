@@ -185,7 +185,11 @@ This pattern is **mandatory** if your handler does any async work — an unhandl
 
 ## Reference source
 
-webapp3 v40-12.0:
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3 v40-12.0):**
+
 - `src/signals/*.ts` — the 10 hub files
 - `src/services/InfinityClient.service.ts:306-324` — `createSignalHandler`
 - `@pexip/signal` — the `createSignal` implementation

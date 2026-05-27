@@ -209,6 +209,11 @@ The mobile facing-mode toggle uses `toggleFacingMode` from the media service (se
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/pages/Preflight.page.tsx` — top-level preflight page
 - `src/viewModels/ExpressFlow.viewModel.tsx` — desktop branch
 - `src/viewModels/PreflightDeviceSelection.viewModel.tsx` — device-picker wiring

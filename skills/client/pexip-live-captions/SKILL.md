@@ -238,6 +238,11 @@ Use this for a transcript panel; use `useLiveCaptions` for the live overlay.
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/hooks/useLiveCaptions.ts` — hook implementation (125 LOC)
 - `src/services/InfinityClient.service.ts:1221-1251` — server-side transcript builder
 - `src/services/InfinityClient.service.ts:890-901` — `enableLiveCaptions` SDK wrapper

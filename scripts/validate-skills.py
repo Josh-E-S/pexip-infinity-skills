@@ -12,7 +12,10 @@ Rules (see spec/pexip-conventions.md):
   6. No host-specific frontmatter keys (allowed-tools, disable-model-invocation,
      context, paths, hooks, agent, model, effort, argument-hint, arguments,
      user-invocable, when_to_use, shell).
-  7. Body must end with a "Reference source" or "Authoritative docs" section.
+  7. Body must end with a "Reference source" or "Authoritative docs" section,
+     and that section must cite at least one authoritative Pexip docs URL
+     (docs.pexip.com / www.pexip.com / github.com/pexip). Per spec §7 the
+     authoritative URL is mandatory — a header alone is not enough.
   8. Body should be under 500 lines (warn at 250).
   9. Relative-path markdown links in any skill or recipe markdown must resolve.
 
@@ -48,6 +51,12 @@ BODY_LINES_HARD_CAP = 500
 LINK_RE = re.compile(r"\[(?P<text>[^\]]+)\]\((?P<href>[^)]+)\)")
 BODY_LINES_WARN = 250
 NAME_RE = re.compile(r"^pexip-[a-z0-9]+(-[a-z0-9]+)*$")
+FOOTER_HEADER_RE = re.compile(
+    r"^##\s+(reference source|authoritative docs)\s*$", re.IGNORECASE | re.MULTILINE
+)
+PEXIP_DOCS_URL_RE = re.compile(
+    r"https?://(?:[a-z0-9-]+\.)*pexip\.com/|https?://github\.com/pexip/", re.IGNORECASE
+)
 
 
 def parse_frontmatter(text: str) -> tuple[dict[str, Any], str]:
@@ -128,12 +137,20 @@ def check(skill_md: Path) -> tuple[list[str], list[str]]:
     if fm.get("license") and fm["license"] != "MIT":
         errors.append(f"frontmatter: license={fm['license']!r} must be 'MIT'")
 
-    # 7. Reference source footer.
-    body_lower = body.lower()
-    if "## reference source" not in body_lower and "## authoritative docs" not in body_lower:
+    # 7. Reference source footer + mandatory authoritative Pexip docs URL.
+    footer = FOOTER_HEADER_RE.search(body)
+    if not footer:
         errors.append(
             "body: missing '## Reference source' (or '## Authoritative docs') section"
         )
+    else:
+        # Look for a Pexip docs URL anywhere from the footer header onward.
+        # Spec §7: the authoritative URL is mandatory, not just the header.
+        if not PEXIP_DOCS_URL_RE.search(body[footer.start() :]):
+            errors.append(
+                "body: footer has no authoritative Pexip docs URL "
+                "(docs.pexip.com / www.pexip.com / github.com/pexip) — see spec/pexip-conventions.md §7"
+            )
 
     # 8. Body line counts.
     lines = body.count("\n")

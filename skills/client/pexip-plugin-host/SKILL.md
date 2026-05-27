@@ -213,6 +213,11 @@ For details on how webapp3 manages native React state for plugins (buttons, form
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/plugins/index.tsx` — `PluginManager` (433 LOC)
 - `src/plugins/handleUiRPC.ts` — UI element handlers (337 LOC)
 - `src/plugins/handleAppRPC.ts` — app-level RPCs

@@ -165,6 +165,11 @@ For detailed explanations of presentation audio mixing, dynamic content hints (m
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/hooks/usePresentationSetup.ts` — the wiring (124 LOC)
 - `src/services/Media.service.ts:213-316` — `getDisplayMedia` + `setCurrentDisplayMedia`
 - `src/services/Media.service.ts:182-192` — `deriveDegradationPreference`

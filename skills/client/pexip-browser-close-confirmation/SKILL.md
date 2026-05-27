@@ -144,6 +144,11 @@ Webapp3's `navigateToPostMeeting` doesn't do this currently — it relies on the
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/hooks/useBrowserCloseConfirmation.tsx` — the hook (60 LOC)
 - `src/hooks/useBrowserCloseConfirmationConfig.tsx` — the decision-tree resolver
 - `src/types.ts` — `BrowserCloseConfirmation` enum

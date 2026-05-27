@@ -216,6 +216,11 @@ To support independent layouts, expose two pickers and call `changeLayout({layou
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/services/InfinityClient.service.ts:624-681` — `changeLayout` / `changePersonalLayout` wrappers
 - `src/services/InfinityClient.service.ts:715-719` — overlay text toggle
 - `src/services/InfinityClient.service.ts:801-811` — `presInMix` with direct-media guard

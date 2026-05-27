@@ -166,6 +166,11 @@ Honor the `disconnectDestination` from your branding manifest — it's how organ
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/services/InfinityClient.service.ts` — full implementation (1759 LOC)
 - `src/signals/InfinityClient.signals.ts`, `Call.signals.ts`, `Meeting.signals.ts`
 - `src/types.ts` — `MeetingFlow` enum

@@ -210,6 +210,11 @@ For details on applying favicons and setting up custom join-flow steps (such as 
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Customizing Webapp3 (branding / manifest schema): https://docs.pexip.com/admin/customizing_webapp3.htm
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+- **Reference implementation (webapp3):**
+
 - `src/branding/index.ts` — manifest types + `loadBranding` + `getBrandingPath`
 - `src/branding/useBrandingLoader.ts` — the React hook + apply functions (212 LOC)
 - `src/branding/Context.ts` — exposes the loaded manifest via React context

@@ -218,6 +218,11 @@ callSignals.onCallQualityStats.add(history => {
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/services/InfinityClient.service.ts:1266-1309` — `hasQualityStatsChanged`, `handleRtcStats`, `handleCallQualityChanged`
 - `pexip-sdks/peer-connection-stats/src/statsCollector.types.ts` — full type catalog
 - `pexip-sdks/peer-connection-stats/src/statsCollector.ts` — collection loop

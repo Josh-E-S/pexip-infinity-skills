@@ -171,6 +171,11 @@ These run *without* re-requesting `getUserMedia` — the processors swap paramet
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/services/Media.service.ts` — the full pipeline (720 LOC)
 - `src/signals/Media.signals.ts` — the signal hub
 - `src/contexts/UserMediaContextProvider.tsx` — how the service is exposed to React

@@ -205,6 +205,11 @@ A `BreakoutRooms.signals` `setBreakoutStepSignal` lets external code force a ste
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/services/InfinityClient.service.ts:682-796` — all breakout RPC wrappers
 - `src/viewModels/BreakoutRoomsPanel.viewModel.tsx` — the panel state machine
 - `src/hooks/useBreakoutAskForHelp.tsx`, `useBreakoutRoomsCount.ts`, `useIsABreakoutSessionActive.ts`, `useOnBreakoutsEditSave.ts`

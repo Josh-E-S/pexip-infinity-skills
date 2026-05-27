@@ -194,6 +194,11 @@ If this returns false, hide all FECC UI even if individual participants have `ca
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/services/InfinityClient.service.ts:815, 1359-1380, 1492-1503` — FECC integration
 - `src/viewModels/FeccButton.viewModel.tsx` — button gating (30 LOC)
 - `src/viewModels/FeccGw.viewModel.tsx` — gateway-call FECC variant

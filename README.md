@@ -4,6 +4,17 @@
 [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/Josh-E-S/pexip-infinity-skills/blob/main/LICENSE)
 [![Agent Skills Compatible](https://img.shields.io/badge/Agent_Skills-compatible-blue)](https://agentskills.io)
 
+> **Status: actively maturing.** All 27 skills are usable today, but two
+> quality passes are still in progress:
+> - **Trigger evals** — automated tests that confirm each skill fires on
+>   real user phrasing. Currently authored for 4 of 27 skills; the rest
+>   are being added incrementally.
+> - **Manual skill-tree review** — walking each skill's `SKILL.md` and its
+>   sibling docs against the authoritative Pexip sources for accuracy and
+>   completeness.
+>
+> Expect content to keep improving. Pin a commit if you need stability.
+
 `pexip-infinity-skills` is the **umbrella [Agent Skills](https://agentskills.io)
 package for [Pexip Infinity](https://www.pexip.com/products/infinity-platform)**.
 Drop it into any compliant skills host to give that host concrete,
@@ -52,7 +63,7 @@ host's config — see Prerequisites below.
 
 ## Skill index
 
-**26 skills across server-side and client-side domains.**
+**27 skills across server-side and client-side domains.**
 
 ### Server-side (`skills/_intake`, `operations`, `management-api`, `events`, `policy`, `room-integration`)
 
@@ -67,6 +78,7 @@ host's config — see Prerequisites below.
 | **pexip-event-sinks** | events | both — webhook push events from Pexip |
 | **pexip-external-policy** | policy | developer — external policy server hooks for per-call decisions |
 | **pexip-mjx** | room-integration | both — MJX / One-Touch Join for in-room video systems |
+| **pexip-room-integration** | room-integration | developer — hardware room systems (Cisco RoomOS, Poly, Crestron, Q-SYS, Logitech) via macros / local APIs |
 
 ### Client-side (`skills/client/`) — web (TypeScript + React)
 

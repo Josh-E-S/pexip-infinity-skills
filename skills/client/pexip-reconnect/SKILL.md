@@ -169,6 +169,11 @@ If you want a quieter UX, drop `isInterrupt` so the toast queues instead of repl
 
 ## Reference source
 
+- **Authoritative Pexip docs:**
+  - Pexip client SDK overview: https://docs.pexip.com/developer/clientapi.htm
+  - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
+- **Reference implementation (webapp3):**
+
 - `src/hooks/useOnFailedInfinityRequest.ts` — the toast suppressor (20 LOC)
 - `src/pages/MeetingManager.page.tsx:41-87` — the wiring for control-only meetings
 - `src/pages/InMeeting.page.tsx:64-109` — the wiring for full meetings

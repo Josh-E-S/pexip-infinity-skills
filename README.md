@@ -1,4 +1,4 @@
-# pexip-infinity-skills
+# Pexip Infinity Skills
 
 [![CI](https://github.com/Josh-E-S/pexip-infinity-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/Josh-E-S/pexip-infinity-skills/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-green)](https://github.com/Josh-E-S/pexip-infinity-skills/blob/main/LICENSE)
@@ -6,6 +6,7 @@
 
 > **Status: actively maturing.** All 27 skills are usable today, but two
 > quality passes are still in progress:
+>
 > - **Trigger evals** — automated tests that confirm each skill fires on
 >   real user phrasing. Currently authored for 4 of 27 skills; the rest
 >   are being added incrementally.
@@ -67,17 +68,17 @@ host's config — see Prerequisites below.
 
 ### Server-side (`skills/_intake`, `operations`, `management-api`, `events`, `policy`, `room-integration`)
 
-| Skill | Domain | Audience |
-|---|---|---|
-| **pexip-intake** | router | both — start here for open-ended "I want to use Pexip" requests; routes server- or client-side |
-| **pexip-operations** | operations | operator — kick / lock / report / configure / health-check |
-| **pexip-config-api** | management-api | developer — Configuration admin API (CRUD on VMRs, dial plan, locations, end-users, …) |
-| **pexip-status-api** | management-api | developer — Status admin API (live conferences, participants, node load, alarms) |
-| **pexip-history-api** | management-api | developer — History admin API (post-call CDRs, quality forensics) |
-| **pexip-command-api** | management-api | developer — Command admin API (live actions: kick / mute / lock / transfer / layout) |
-| **pexip-event-sinks** | events | both — webhook push events from Pexip |
-| **pexip-external-policy** | policy | developer — external policy server hooks for per-call decisions |
-| **pexip-mjx** | room-integration | both — MJX / One-Touch Join for in-room video systems |
+| Skill                      | Domain           | Audience                                                                                                  |
+| -------------------------- | ---------------- | --------------------------------------------------------------------------------------------------------- |
+| **pexip-intake**           | router           | both — start here for open-ended "I want to use Pexip" requests; routes server- or client-side            |
+| **pexip-operations**       | operations       | operator — kick / lock / report / configure / health-check                                                |
+| **pexip-config-api**       | management-api   | developer — Configuration admin API (CRUD on VMRs, dial plan, locations, end-users, …)                    |
+| **pexip-status-api**       | management-api   | developer — Status admin API (live conferences, participants, node load, alarms)                          |
+| **pexip-history-api**      | management-api   | developer — History admin API (post-call CDRs, quality forensics)                                         |
+| **pexip-command-api**      | management-api   | developer — Command admin API (live actions: kick / mute / lock / transfer / layout)                      |
+| **pexip-event-sinks**      | events           | both — webhook push events from Pexip                                                                     |
+| **pexip-external-policy**  | policy           | developer — external policy server hooks for per-call decisions                                           |
+| **pexip-mjx**              | room-integration | both — MJX / One-Touch Join for in-room video systems                                                     |
 | **pexip-room-integration** | room-integration | developer — hardware room systems (Cisco RoomOS, Poly, Crestron, Q-SYS, Logitech) via macros / local APIs |
 
 ### Client-side (`skills/client/`) — web (TypeScript + React)
@@ -93,25 +94,25 @@ plugins, and CVI.
 > desktop / Electron clients use different SDKs and are not yet
 > covered in this package — see the Roadmap.
 
-| Skill | Audience |
-|---|---|
-| **pexip-client-intake** | both — start here for open-ended client-side requests |
-| **pexip-signals-pattern** | developer — `@pexip/signal` pub/sub architecture, when to add a signal hub vs use React state |
-| **pexip-call-lifecycle** | developer — `createInfinityClient`, join flows (PIN/IDP/extension/host-vs-guest), ICE restart, transfers |
-| **pexip-media-pipeline** | developer — `createMedia` + audio/video processors, denoise, blur, audio mixing, self-healing tracks |
-| **pexip-preflight** | developer — device enumeration, permission UX, mic/camera test, blocked-permission screens |
-| **pexip-reconnect** | developer — `NetworkState` coordination, toast-spam suppression, `onFailedRequest` |
-| **pexip-chat** | developer — group + direct messages, optimistic UI, retry-queue reconciliation, character limit |
-| **pexip-participants** | developer — `GroupKey` filters, mute/kick/admit, host/guest sorting, batched activity |
-| **pexip-presentation** | developer — screen sharing, content hints, audio mixing, ICE-restart preservation |
-| **pexip-breakouts** | developer — open/edit/close rooms, auto vs manual assignment, ask-for-help, guest tokens |
-| **pexip-layouts** | developer — host vs personal layouts, lecture-mode guest layout, presentation-in-mix detection |
-| **pexip-branding-manifest** | developer — `manifest.json` loading, color palette, hidden functionality, custom step iframe |
-| **pexip-plugin-host** | developer — `@pexip/plugin-api`, sandboxed iframes, panel widgets, toolbar buttons |
-| **pexip-stats-monitoring** | developer — `onRtcStats`, `qualityLimitationReason`, `fpsVolatility`, call-quality UI |
-| **pexip-browser-close-confirmation** | developer — `beforeunload` wiring, "Are you sure you want to leave?" prompt |
-| **pexip-live-captions** | developer — real-time transcription overlay, interim vs final, auto-clear timer, breakout reset |
-| **pexip-fecc** | developer — far-end camera control (PTZ), capability detection, currently-controlling tracking |
+| Skill                                | Audience                                                                                                |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| **pexip-client-intake**              | both — start here for open-ended client-side requests                                                   |
+| **pexip-signals-pattern**            | developer —`@pexip/signal` pub/sub architecture, when to add a signal hub vs use React state            |
+| **pexip-call-lifecycle**             | developer —`createInfinityClient`, join flows (PIN/IDP/extension/host-vs-guest), ICE restart, transfers |
+| **pexip-media-pipeline**             | developer —`createMedia` + audio/video processors, denoise, blur, audio mixing, self-healing tracks     |
+| **pexip-preflight**                  | developer — device enumeration, permission UX, mic/camera test, blocked-permission screens              |
+| **pexip-reconnect**                  | developer —`NetworkState` coordination, toast-spam suppression, `onFailedRequest`                       |
+| **pexip-chat**                       | developer — group + direct messages, optimistic UI, retry-queue reconciliation, character limit         |
+| **pexip-participants**               | developer —`GroupKey` filters, mute/kick/admit, host/guest sorting, batched activity                    |
+| **pexip-presentation**               | developer — screen sharing, content hints, audio mixing, ICE-restart preservation                       |
+| **pexip-breakouts**                  | developer — open/edit/close rooms, auto vs manual assignment, ask-for-help, guest tokens                |
+| **pexip-layouts**                    | developer — host vs personal layouts, lecture-mode guest layout, presentation-in-mix detection          |
+| **pexip-branding-manifest**          | developer —`manifest.json` loading, color palette, hidden functionality, custom step iframe             |
+| **pexip-plugin-host**                | developer —`@pexip/plugin-api`, sandboxed iframes, panel widgets, toolbar buttons                       |
+| **pexip-stats-monitoring**           | developer —`onRtcStats`, `qualityLimitationReason`, `fpsVolatility`, call-quality UI                    |
+| **pexip-browser-close-confirmation** | developer —`beforeunload` wiring, "Are you sure you want to leave?" prompt                              |
+| **pexip-live-captions**              | developer — real-time transcription overlay, interim vs final, auto-clear timer, breakout reset         |
+| **pexip-fecc**                       | developer — far-end camera control (PTZ), capability detection, currently-controlling tracking          |
 
 See `ARCHITECTURE.md` for the design rules. See `CONTRIBUTING.md` for how
 to add a skill and the public-repo hygiene policy enforced by pre-commit
@@ -125,7 +126,7 @@ The package is host-agnostic; each host has its own way to load skills.
 Pick whichever matches your tool.
 
 > **Just want to act on a live deployment?** Loading the skills (below) is
-> instant and needs nothing but the files. To actually *run* commands
+> instant and needs nothing but the files. To actually _run_ commands
 > against a Pexip Management Node, you'll also need an MCP host or direct
 > REST access — see [Prerequisites](#prerequisites).
 
@@ -206,7 +207,7 @@ any skill that's already there. Add `--help` to see all options.
 
 ## Prerequisites
 
-Two ways to actually *use* the skills, both supported:
+Two ways to actually _use_ the skills, both supported:
 
 ### 1. Using an MCP host
 

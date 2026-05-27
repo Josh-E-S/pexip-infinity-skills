@@ -124,14 +124,31 @@ hooks.
 The package is host-agnostic; each host has its own way to load skills.
 Pick whichever matches your tool.
 
+> **Just want to act on a live deployment?** Loading the skills (below) is
+> instant and needs nothing but the files. To actually *run* commands
+> against a Pexip Management Node, you'll also need an MCP host or direct
+> REST access — see [Prerequisites](#prerequisites).
+
+### Step 1 — Get the package
+
+Clone the repo (or download it as a ZIP from GitHub and unzip it). Every
+command below is run from inside the resulting folder.
+
+```bash
+git clone https://github.com/Josh-E-S/pexip-infinity-skills.git
+cd pexip-infinity-skills
+```
+
+### Step 2 — Load the skills into your host
+
 ### Claude Code
 
 The repo ships a Claude Code plugin manifest at `.claude-plugin/plugin.json`,
 so the most ergonomic install is the plugin path:
 
 ```bash
-# Local dev: load directly from this directory
-claude --plugin-dir /path/to/pexip-infinity-skills
+# Local dev: load directly from this directory (run from the repo root)
+claude --plugin-dir .
 
 # Or, once published to a marketplace:
 /plugin install pexip-infinity-skills@<marketplace-name>
@@ -170,11 +187,20 @@ cp -r skills/operations/pexip-operations <host-skills-dir>/
 ### Bulk install (all skills at once)
 
 ```bash
-./scripts/install.sh ~/.claude/skills/
+# Default target — Claude Code's skills directory (~/.claude/skills)
+./scripts/install.sh
+
+# Or pass your own target directory
+./scripts/install.sh ~/.gemini/skills/
+
+# Prefer symlinks (so `git pull` updates the installed skills in place)
+./scripts/install.sh --symlink ~/.claude/skills/
 ```
 
-Copies every skill in `skills/**/` into the target directory, flattening
-the domain grouping (most hosts expect `<target>/<skill-name>/SKILL.md`).
+Run with no argument, it installs to `~/.claude/skills`. It copies every
+skill in `skills/**/` into the target directory, flattening the domain
+grouping (most hosts expect `<target>/<skill-name>/SKILL.md`), and skips
+any skill that's already there. Add `--help` to see all options.
 
 ---
 

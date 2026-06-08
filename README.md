@@ -159,6 +159,7 @@ You can also point Claude Code at individual skills by copying any
 `skills/<domain>/<skill-name>/` directory into your skills tree:
 
 ```bash
+mkdir -p ~/.claude/skills
 cp -r skills/operations/pexip-operations ~/.claude/skills/
 ```
 
@@ -168,6 +169,7 @@ Skills are picked up from Gemini CLI's configured skill directories. Copy
 the ones you want:
 
 ```bash
+mkdir -p ~/.gemini/skills
 cp -r skills/operations/pexip-operations ~/.gemini/skills/
 ```
 
@@ -182,6 +184,7 @@ Any host that follows the open
 skills location:
 
 ```bash
+mkdir -p <host-skills-dir>
 cp -r skills/operations/pexip-operations <host-skills-dir>/
 ```
 

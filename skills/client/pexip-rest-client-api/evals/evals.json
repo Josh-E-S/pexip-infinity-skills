@@ -1,0 +1,92 @@
+[
+  {
+    "query": "I'm building a native Android app that needs to join Pexip meetings — how do I authenticate and connect?",
+    "should_trigger": true,
+    "note": "positive — native mobile, no browser, request_token auth flow"
+  },
+  {
+    "query": "How does the Pexip /api/client/v2/ token auth work? I need to get a token, refresh it, and release it on disconnect.",
+    "should_trigger": true,
+    "note": "positive — explicit REST API token lifecycle"
+  },
+  {
+    "query": "I need to receive real-time Pexip participant events in a server-side Node.js process — what do I subscribe to?",
+    "should_trigger": true,
+    "note": "positive — SSE event stream from a non-browser server context"
+  },
+  {
+    "query": "I'm writing a Python script that joins a Pexip conference and kicks participants who have been idle",
+    "should_trigger": true,
+    "note": "positive — server-side bot using REST control endpoints"
+  },
+  {
+    "query": "How do I submit an SDP offer to Pexip and get back the SDP answer without using PexRTC?",
+    "should_trigger": true,
+    "note": "positive — explicit raw SDP/ICE exchange via /calls endpoint"
+  },
+  {
+    "query": "I'm building a CLI tool that can lock Pexip conferences and disconnect specific participants",
+    "should_trigger": true,
+    "note": "positive — CLI tool, REST control endpoints, non-browser context"
+  },
+  {
+    "query": "What events does the Pexip SSE stream send? I need participant_create, presentation_start, and message_received.",
+    "should_trigger": true,
+    "note": "positive — SSE event stream enumeration, explicit REST API events"
+  },
+  {
+    "query": "How do I handle PIN authentication in the Pexip REST client API?",
+    "should_trigger": true,
+    "note": "positive — PIN via HTTP header on request_token, REST-specific auth"
+  },
+  {
+    "query": "I need to signal presentation start and stop in my Pexip integration without using PexRTC",
+    "should_trigger": true,
+    "note": "positive — take_floor/release_floor REST endpoints"
+  },
+  {
+    "query": "I'm building a desktop Electron app that needs to connect to Pexip — what API should I use?",
+    "should_trigger": true,
+    "note": "positive — desktop/Electron is non-browser-native context, REST API is appropriate"
+  },
+  {
+    "query": "How do I use PexRTC to join a Pexip meeting in my web app?",
+    "should_trigger": false,
+    "note": "negative — explicit PexRTC browser SDK, belongs to pexip-pexrtc"
+  },
+  {
+    "query": "I want to build a Pexip video widget for my website — what's the easiest way?",
+    "should_trigger": false,
+    "note": "negative — browser web app, easy path = PexRTC, belongs to pexip-pexrtc"
+  },
+  {
+    "query": "How do I use createInfinityClient from @pexip/infinity to join a meeting?",
+    "should_trigger": false,
+    "note": "negative — @pexip/infinity npm SDK, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "I need Pexip to POST call events to my webhook when conferences start and end",
+    "should_trigger": false,
+    "note": "negative — server-side webhook event delivery config, belongs to pexip-event-sinks"
+  },
+  {
+    "query": "How do I kick a participant from a live Pexip meeting using the management API?",
+    "should_trigger": false,
+    "note": "negative — admin management API command, belongs to pexip-command-api"
+  },
+  {
+    "query": "I want to show participants their own video preview before joining a Pexip call",
+    "should_trigger": false,
+    "note": "negative — pre-call device/preview UI in browser, belongs to pexip-preflight"
+  },
+  {
+    "query": "How do I set up breakout rooms in my Pexip React app?",
+    "should_trigger": false,
+    "note": "negative — browser React app breakouts, belongs to pexip-breakouts (via @pexip/infinity)"
+  },
+  {
+    "query": "My Pexip node is showing high participant counts — how do I investigate using the status API?",
+    "should_trigger": false,
+    "note": "negative — management status API for admin monitoring, belongs to pexip-status-api"
+  }
+]

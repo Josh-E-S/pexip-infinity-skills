@@ -1,0 +1,102 @@
+[
+  {
+    "query": "I want to add Pexip video calling to my website. What's the quickest way to get started?",
+    "should_trigger": true,
+    "note": "positive — open-ended browser integration ask, no SDK named, should default to PexRTC as the 95% case"
+  },
+  {
+    "query": "How do I load PexRTC and make a call to a Pexip VMR?",
+    "should_trigger": true,
+    "note": "positive — explicit PexRTC + makeCall, core skill surface"
+  },
+  {
+    "query": "My Pexip web app is stuck on the PIN screen — onSetup keeps firing but connect() doesn't seem to work",
+    "should_trigger": true,
+    "note": "positive — symptom-led PIN/onSetup debugging, classic PexRTC pain point"
+  },
+  {
+    "query": "How do I show the remote video stream from a Pexip call in a browser?",
+    "should_trigger": true,
+    "note": "positive — onConnect stream wiring to a video element"
+  },
+  {
+    "query": "I need to mute all guests and lock the conference from my web app — what Pexip API calls do I use?",
+    "should_trigger": true,
+    "note": "positive — host controls (setMuteAllGuests, setConferenceLock), PexRTC surface"
+  },
+  {
+    "query": "How do I build a participant list that updates in real time for a Pexip meeting?",
+    "should_trigger": true,
+    "note": "positive — onParticipantCreate/Update/Delete roster pattern"
+  },
+  {
+    "query": "I want to let users share their screen in my Pexip web app",
+    "should_trigger": true,
+    "note": "positive — present('screen') + onScreenshareConnected"
+  },
+  {
+    "query": "How do I receive the incoming presentation stream in my Pexip browser client?",
+    "should_trigger": true,
+    "note": "positive — getPresentation() + onPresentationConnected"
+  },
+  {
+    "query": "Can I use PexRTC in a React app? How do I wire it up with hooks?",
+    "should_trigger": true,
+    "note": "positive — React integration pattern, explicit PexRTC"
+  },
+  {
+    "query": "My Pexip call drops and I need to detect when the server disconnects the user",
+    "should_trigger": true,
+    "note": "positive — onDisconnect / onError callback handling"
+  },
+  {
+    "query": "How do I switch the camera mid-call in my Pexip web app without hanging up?",
+    "should_trigger": true,
+    "note": "positive — video_source + renegotiate(false), mid-call device change"
+  },
+  {
+    "query": "I need to send a chat message to all participants in a Pexip conference from my web app",
+    "should_trigger": true,
+    "note": "positive — sendChatMessage broadcast, PexRTC surface"
+  },
+  {
+    "query": "How do I build a Pexip app using @pexip/infinity and createInfinityClient?",
+    "should_trigger": false,
+    "note": "negative — explicit @pexip/infinity npm SDK, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "I'm building a Python bot that needs to join Pexip conferences and monitor participants",
+    "should_trigger": false,
+    "note": "negative — server-side / non-browser, belongs to pexip-rest-client-api"
+  },
+  {
+    "query": "How does the Pexip REST client API token auth work? I need request_token and refresh_token",
+    "should_trigger": false,
+    "note": "negative — explicit REST API token flow, belongs to pexip-rest-client-api"
+  },
+  {
+    "query": "I want to configure Pexip event sinks to get webhook notifications when calls start",
+    "should_trigger": false,
+    "note": "negative — server-side webhook config, belongs to pexip-event-sinks"
+  },
+  {
+    "query": "How do I use infinityClientSignals and onPinRequired in my Pexip app?",
+    "should_trigger": false,
+    "note": "negative — @pexip/infinity signal API, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "I'm building a native iOS app that connects to Pexip — how does the API work?",
+    "should_trigger": false,
+    "note": "negative — native mobile, not a browser context, belongs to pexip-rest-client-api"
+  },
+  {
+    "query": "How do I add a VMR in Pexip and configure dial-in numbers?",
+    "should_trigger": false,
+    "note": "negative — server-side admin configuration, belongs to pexip-config-api"
+  },
+  {
+    "query": "Can I use SDP and ICE candidates directly with Pexip instead of a JS library?",
+    "should_trigger": false,
+    "note": "negative — raw WebRTC / REST API approach, belongs to pexip-rest-client-api"
+  }
+]

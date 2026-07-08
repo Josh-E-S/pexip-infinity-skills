@@ -1,5 +1,5 @@
 ---
-name: pexip
+name: pexip-intake
 description: Use at the START of any open-ended Pexip Infinity task — server-side (management/admin APIs, events, policy, room integration, dial plan) or client-side (webapp, embedded client, CVI, branding) — to scope the work before answering. Triggers when the user says "I want to use Pexip", "set up Pexip", "automate Pexip", "report on Pexip calls", "build a Pexip app", or any project-shaped request without specifics. Ask the questions in this skill BEFORE diving in. Do NOT use for narrow specific questions like "how does summarize_calls work" or "kick Alice from the standup" — only for project-shaped requests where the user hasn't yet decided what they're building.
 license: MIT
 ---

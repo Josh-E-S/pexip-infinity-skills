@@ -1,6 +1,6 @@
 ---
 name: pexip-client-intake
-description: Use at the start of any new Pexip-related task to scope the work before writing code. Triggers when the user says "I want to build a Pexip app", "add Pexip to my app", "use Pexip Infinity", "integrate Pexip video", "set up @pexip/infinity", or any open-ended Pexip project request without specifics. Ask the questions in this skill BEFORE proposing an implementation. Do not invoke for narrow, specific questions like "how does onPeerDisconnect work" — only for project-shaped requests.
+description: Use at the start of any open-ended Pexip client-side project — browser app, embedded widget, native mobile, or server-side bot — to scope the work before writing code. Triggers when the user says "I want to build a Pexip app", "add Pexip video to my app", "use Pexip Infinity", "integrate Pexip", "embed Pexip", "build a video calling app with Pexip", or any open-ended Pexip client request without specifics. Ask the questions in this skill BEFORE proposing an implementation — especially to route between PexRTC (browser, 95% of cases), @pexip/infinity (webapp3-level TypeScript), and the REST Client API (native/server). Do not invoke for narrow specific questions like "how does onPeerDisconnect work" or "what does makeCall do" — only for project-shaped requests.
 license: MIT
 ---
 
@@ -41,24 +41,36 @@ Routing:
 - **D** → plugin-host (note: that skill is the **host** side; for plugin-author docs, point to Pexip's separate plugin SDK docs)
 - **E** → ask follow-up
 
-### Q1.5. Which client SDK? (ask if answer to Q1 is A, B, or D)
+### Q1.5. Which client API? (ask if answer to Q1 is A, B, or D)
+
+**Default to PexRTC unless told otherwise.** It covers 95% of Pexip web integrations.
 
 ```
-A) PexRTC — Pexip's official documented JavaScript API
-   (loaded from the Conferencing Node at /static/webrtc/js/pexrtc.js,
-   callback-based: makeCall → onSetup → connect(pin) → onConnect)
-B) @pexip/infinity — the modular TypeScript SDK that webapp3 uses
-   (installed via npm, signal-based: infinityClient.call() → onPinRequired)
-C) Not sure / haven't decided yet
+A) PexRTC — browser app, script-tag load, no npm/build step
+   (the default: Pexip's official JS API, callback-based)
+B) @pexip/infinity — building a webapp3-level TypeScript app with npm
+   (typed signals, modular architecture, same SDK Pexip uses internally)
+C) REST Client API — non-browser: native mobile, desktop, server-side, CLI
+   (raw HTTP + SSE, you manage the WebRTC peer connection yourself)
+D) Not sure
 ```
 
 Routing:
-- **A** → Route to `pexip-pexrtc` skill. It covers the full PexRTC API: call lifecycle, PIN handling, roster, screenshare, host controls, React patterns, and working examples.
-- **B** → Continue with Q2. All skills in this package cover `@pexip/infinity`.
-- **C** → Recommend:
-  - **PexRTC** (`pexip-pexrtc`) if they want a quick integration with minimal setup, follows Pexip's official docs, no npm/build step needed
-  - **`@pexip/infinity`** (existing skills: `pexip-call-lifecycle`, `pexip-signals-pattern`, etc.) if they're building a full-featured webapp3-level application with typed signals, media processors, and modular architecture
-  - **REST Client API** (`pexip-rest-client-api`) if they're building outside the browser (mobile, server-side, CLI) or need raw HTTP control
+- **A** → Route to `pexip-pexrtc`. It covers the full PexRTC API end-to-end — makeCall, connect, PIN/IDP auth, roster, host controls, screenshare, chat, breakouts, FECC, captions, and React patterns. A single skill gets a working app in one shot.
+- **B** → Continue with Q2. All skills in this package (`pexip-call-lifecycle`, `pexip-signals-pattern`, etc.) cover `@pexip/infinity`.
+- **C** → Route to `pexip-rest-client-api`. Covers token auth, SDP/ICE exchange, SSE event stream, and all REST control endpoints for non-browser environments.
+- **D** → Recommend **PexRTC** by default. Ask only one follow-up: "Is this for a browser, or are you building a native mobile/desktop app?" Browser → PexRTC. Native/server → REST API. If they want full TypeScript + npm architecture at webapp3 scale → `@pexip/infinity`.
+
+**The real decision axis is WebRTC abstraction, not browser vs. server:**
+
+| | PexRTC | `@pexip/infinity` | REST Client API |
+|---|---|---|---|
+| Who handles SDP/ICE? | PexRTC | `@pexip/infinity` | You |
+| Load method | `<script>` tag from node | `npm install` | HTTP from anywhere |
+| API style | Callbacks | Typed signals | HTTP + SSE |
+| Deployment | Browser only | Browser / Node | Any HTTP client |
+| Pexip official docs | Yes (full) | No public docs | Yes (full) |
+| Best for | Quick browser embed | Full TS webapp | Native / server / CLI |
 
 ### Q2. Which features matter for v1? (always ask)
 
@@ -115,11 +127,11 @@ Route to branding-manifest with the appropriate sub-section.
 
 ## SDK disambiguation
 
-All client-side skills in this package (`pexip-call-lifecycle`, `pexip-signals-pattern`, `pexip-media-pipeline`, `pexip-presentation`, etc.) cover the **`@pexip/infinity` npm SDK** — the same SDK that Pexip's own webapp3 uses internally.
+Three distinct client APIs exist — route to the right one early:
 
-They do **not** cover **PexRTC**, which is Pexip's officially documented JavaScript client API. PexRTC uses a different pattern (`makeCall` + `onSetup` + `connect(pin)`) and is loaded as a script tag from the Conferencing Node.
-
-If a developer mentions `makeCall`, `onSetup`, `connect(pin)`, or loading `pexrtc.js`, they're using PexRTC — route them to Pexip's official docs, not to these skills.
+- **PexRTC** (`pexip-pexrtc`) — browser apps, script-tag load, callback-based. Covers everything: call setup, PIN, roster, host controls, screenshare, chat, breakouts, FECC, captions. The default for web integrations. If a developer mentions `makeCall`, `onSetup`, `connect(pin)`, or loading `pexrtc.js`, they're using PexRTC.
+- **`@pexip/infinity`** (`pexip-call-lifecycle` etc.) — the npm SDK that Pexip's own webapp3 is built on. Typed signals, modular architecture. The other skills in this package cover it exclusively. If a developer mentions `createInfinityClient`, `infinityClientSignals`, or `@pexip/infinity`, they're using this.
+- **REST Client API** (`pexip-rest-client-api`) — raw HTTP + SSE, no JS library. Right for native mobile, desktop, server-side bots, CLI. Developer manages the WebRTC peer connection themselves. If a developer mentions `/api/client/v2/`, `request_token`, or "I'm not in a browser", they're using this.
 
 ## Don't ask these (defaults are fine)
 

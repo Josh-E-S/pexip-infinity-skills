@@ -99,4 +99,4 @@ Before any destructive call (`disconnect_*`, `delete_*`, `update_global_settings
 - **Related skills:**
   - Developer reference per admin API: `pexip-config-api`, `pexip-status-api`, `pexip-history-api`, `pexip-command-api`
   - Event-driven companion (webhook events): `pexip-event-sinks`
-  - Router: `pexip-intake`
+  - Router: `pexip`

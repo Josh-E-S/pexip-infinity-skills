@@ -41,6 +41,25 @@ Routing:
 - **D** → plugin-host (note: that skill is the **host** side; for plugin-author docs, point to Pexip's separate plugin SDK docs)
 - **E** → ask follow-up
 
+### Q1.5. Which client SDK? (ask if answer to Q1 is A, B, or D)
+
+```
+A) PexRTC — Pexip's official documented JavaScript API
+   (loaded from the Conferencing Node at /static/webrtc/js/pexrtc.js,
+   callback-based: makeCall → onSetup → connect(pin) → onConnect)
+B) @pexip/infinity — the modular TypeScript SDK that webapp3 uses
+   (installed via npm, signal-based: infinityClient.call() → onPinRequired)
+C) Not sure / haven't decided yet
+```
+
+Routing:
+- **A** → Route to `pexip-pexrtc` skill. It covers the full PexRTC API: call lifecycle, PIN handling, roster, screenshare, host controls, React patterns, and working examples.
+- **B** → Continue with Q2. All skills in this package cover `@pexip/infinity`.
+- **C** → Recommend:
+  - **PexRTC** (`pexip-pexrtc`) if they want a quick integration with minimal setup, follows Pexip's official docs, no npm/build step needed
+  - **`@pexip/infinity`** (existing skills: `pexip-call-lifecycle`, `pexip-signals-pattern`, etc.) if they're building a full-featured webapp3-level application with typed signals, media processors, and modular architecture
+  - **REST Client API** (`pexip-rest-client-api`) if they're building outside the browser (mobile, server-side, CLI) or need raw HTTP control
+
 ### Q2. Which features matter for v1? (always ask)
 
 ```
@@ -93,6 +112,14 @@ D) Multiple brands served from different paths
 ```
 
 Route to branding-manifest with the appropriate sub-section.
+
+## SDK disambiguation
+
+All client-side skills in this package (`pexip-call-lifecycle`, `pexip-signals-pattern`, `pexip-media-pipeline`, `pexip-presentation`, etc.) cover the **`@pexip/infinity` npm SDK** — the same SDK that Pexip's own webapp3 uses internally.
+
+They do **not** cover **PexRTC**, which is Pexip's officially documented JavaScript client API. PexRTC uses a different pattern (`makeCall` + `onSetup` + `connect(pin)`) and is loaded as a script tag from the Conferencing Node.
+
+If a developer mentions `makeCall`, `onSetup`, `connect(pin)`, or loading `pexrtc.js`, they're using PexRTC — route them to Pexip's official docs, not to these skills.
 
 ## Don't ask these (defaults are fine)
 
@@ -223,6 +250,6 @@ That's the full flow. Don't pad it. The user can ask follow-ups.
   - `@pexip/infinity` JS client API reference: https://docs.pexip.com/api_client/api_pexrtc.htm
   - Webapp3 source / patterns: https://github.com/pexip/pexip-webapp3
 - **Related skills (this package):**
-  - Server-side router: `pexip-intake`
+  - Server-side router: `pexip`
   - Webapp patterns: `pexip-signals-pattern`, `pexip-call-lifecycle`, `pexip-media-pipeline`
   - Operator runbook (server side): `pexip-operations`

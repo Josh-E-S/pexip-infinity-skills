@@ -17,7 +17,7 @@ This skill captures the working setup. Most of the heavy lifting is in `@pexip/m
 | `getDisplayMedia` (webapp3 wrapper) | Calls browser's `navigator.mediaDevices.getDisplayMedia()` with config-driven constraints |
 | `setCurrentDisplayMedia(stream)` | Stores the active screen stream globally + emits signals + applies audio content hint |
 | `usePresentation(...)` from `@pexip/media-components` | The state machine: start/stop, remote stream, capability checks, restart-aware |
-| `meeting.present(stream)` / `meeting.endPresent()` | The actual SDK calls — wired internally by `usePresentation` |
+| `meeting.present(stream)` / `infinityClient.stopPresenting()` | The actual SDK calls — note: webapp3 wraps `stopPresenting()` as `meeting.endPresent()` |
 | `presentationStreamSignal` / `endPresentationSignal` | Pub/sub for "presentation started" / "presentation ended" |
 
 ## Quick start: the full setup
@@ -56,7 +56,7 @@ export const usePresentationSetup = () => {
             send: meeting.ableToPresent(),
             recv: meeting.ableToReceivePresentation(),
         }),
-        stopPresentation: meeting.endPresent,
+        stopPresentation: meeting.endPresent, // webapp3 wrapper — the underlying SDK method is infinityClient.stopPresenting()
         handleGetDisplayMedia: getDisplayMedia,
         handlaGetDisplayMediaError: error => {
             // see error mapping below
@@ -92,6 +92,40 @@ The `presentation` object the hook returns has:
 - `remotePresentationStream` — what *another* participant is presenting
 - `startPresentation(stream)`, `stopPresentation()` — manual triggers
 - `presentationCapability` — derived from your callType
+
+## Showing your own presentation
+
+A common mistake: only subscribing to `callSignals.onRemotePresentationStream`. This only fires when *someone else* presents. The local presenter does not receive their own screen share via that signal.
+
+To show the presenter their own content (like Zoom/Teams/Meet do), render the `localMediaStream` from the hook:
+
+```tsx
+const presentation = usePresentationSetup();
+
+// Show active presentation — local or remote
+const activePresentationStream = presentation.remotePresentationStream || presentation.localMediaStream;
+
+return (
+    <div>
+        {activePresentationStream && (
+            <video
+                ref={el => { if (el) el.srcObject = activePresentationStream; }}
+                autoPlay
+                playsInline
+            />
+        )}
+    </div>
+);
+```
+
+If you're not using the `usePresentation` hook (e.g., calling `getDisplayMedia` directly), store the stream from `getDisplayMedia()` and render it yourself:
+
+```ts
+const stream = await navigator.mediaDevices.getDisplayMedia({video: true});
+await infinityClient.present(stream);
+// Also render `stream` in a <video> element so the presenter sees their own share
+localPresentationStreamSignal.emit(stream);
+```
 
 ## `getDisplayMedia` — the constraints
 

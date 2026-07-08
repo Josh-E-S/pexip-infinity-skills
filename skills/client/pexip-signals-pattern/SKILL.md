@@ -53,6 +53,19 @@ const participantActivitySignal = createSignal<ParticipantActivity>({
 });
 ```
 
+## Choosing the right variant
+
+| Question | Answer → Variant |
+|---|---|
+| Will components mount *after* the signal has already emitted? | Yes → `behavior` |
+| Does a new subscriber need the *current* value immediately? | Yes → `behavior` |
+| Is this a one-shot event (PIN required, error, disconnect)? | Usually → `generic` |
+| Is this a stream of events where every event matters (chat messages)? | → `generic` |
+| Does the consumer need the last N values? | → `replay` with `bufferSize` |
+| Do events arrive in bursts (participant joins during reconnect)? | → `batched` |
+
+**Common mistake:** Creating stream signals (`remoteStream`, `localStream`) as `generic`. These emit during call setup, before the meeting UI mounts. By the time the `<video>` component subscribes, the stream is gone. Always use `behavior` for media streams.
+
 ## Quick start: a signal hub for your app
 
 Group signals by domain into a single file. Webapp3 has 10 hubs (`InfinityClient.signals`, `Call.signals`, `Media.signals`, `Meeting.signals`, `MeetingFlow.signals`, `InMeeting.signals`, `Participant.signals`, `BreakoutRooms.signals`, `ImageStore.signals`, `StepByStep.signals`).
@@ -66,6 +79,7 @@ import type {ChatMessage} from '@pexip/media-components';
 export const stepSignal = createSignal<MeetingFlow>({name: 'meeting:step'});
 export const remoteStreamSignal = createSignal<MediaStream | undefined>({
     name: 'meeting:remoteStream',
+    variant: 'behavior',
 });
 export const pinRequiredSignal = createSignal<boolean>({
     name: 'meeting:pinRequired',
@@ -174,6 +188,7 @@ This pattern is **mandatory** if your handler does any async work — an unhandl
 - **Don't `emit()` inside an observer of the same signal** — you'll hit `RangeError: Possible recursive call`. Signals catch this and rethrow.
 - **Behavior signals replay on subscribe.** If you don't want the replay (e.g. you only care about *new* events), use `generic`.
 - **Batched signals require a scheduler.** No default — `setTimeout(task, 100)` is webapp3's choice for participant events.
+- **React mount timing: use `behavior` for any signal a component needs on mount.** If a signal emits during `joinMeeting()` (before the meeting UI mounts), a `generic` signal will have already lost the value by the time the component subscribes in `useEffect`. Use `behavior` for streams, mute state, meeting step, and any "current state" data. The rule: if a late subscriber needs the latest value, it must be `behavior`.
 
 ## See also
 

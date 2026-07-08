@@ -74,13 +74,12 @@ const handleOnCallConnected = createSignalHandler(
 ```
 
 ### `callSignals.onRemoteStream`
-The remote media stream is ready. Wire to your video element.
+The remote media stream is ready. Wire to your video element. **Do not** gate `MeetingFlow.InMeeting` on this signal — it won't fire if you're the only participant. Use `onCallConnected` for the UI state transition instead.
 
 ```ts
 const handleOnRemoteStream = createSignalHandler(
     callSignals.onRemoteStream,
     stream => {
-        updateStep(MeetingFlow.InMeeting);
         setRemoteStream(stream);
     },
 );

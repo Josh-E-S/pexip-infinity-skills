@@ -8,6 +8,23 @@ license: MIT
 
 Joining a Pexip meeting is **not** "call this function and you're in." There are 6 call stages, ~30 event handlers, a join-flow state machine with 7+ steps, and several invariants that webapp3 has fought through in production. This skill captures the shape that actually works.
 
+## Which SDK is this?
+
+These skills cover **`@pexip/infinity`** — the modular TypeScript SDK that Pexip's own webapp3 is built on. It uses typed signals, `createInfinityClient`, and `infinityClientSignals`.
+
+Pexip also publishes **PexRTC** — an older, simpler SDK with a callback-based API (`makeCall` + `connect(pin)` pattern). PexRTC is loaded from the Conferencing Node at `/static/webrtc/js/pexrtc.js` and is what Pexip's official developer documentation primarily covers.
+
+**The two SDKs are not interchangeable.** If you find examples using `pexRTC.makeCall()`, `onSetup`, or `connect(pin)`, those are PexRTC — not the API documented here.
+
+| | PexRTC | `@pexip/infinity` |
+|---|---|---|
+| Load method | `<script>` tag from node | `npm install @pexip/infinity` |
+| API style | Callbacks (`onSetup`, `onConnect`) | Typed signals (`createSignal`) |
+| Join flow | `makeCall()` → `onSetup` → `connect(pin)` | `infinityClient.call({pin})` → `onPinRequired` |
+| Docs | docs.pexip.com/api_client/api_pexrtc.htm | These skills + webapp3 source |
+
+For PexRTC patterns and examples, see the `pexip-pexrtc` skill. For the raw REST API, see `pexip-rest-client-api`.
+
 ## The two state machines
 
 Every Pexip call has **two state machines that run in parallel**:
@@ -60,6 +77,7 @@ import {
     createInfinityClient,
     createInfinityClientSignals,
     createCallSignals,
+    ClientCallType,
 } from '@pexip/infinity';
 
 // 1. Create the signal hubs (see signals-pattern skill)
@@ -89,10 +107,13 @@ infinityClientSignals.onConnected.add(() => {
     void infinityClient.muteVideo({muteVideo: media.videoMuted ?? true});
 });
 
+infinityClientSignals.onCallConnected.add(() => {
+    setMeetingStep(MeetingFlow.InMeeting);
+});
+
 callSignals.onRemoteStream.add(stream => {
     // Wire to <video srcObject={stream} />
     setRemoteStream(stream);
-    setMeetingStep(MeetingFlow.InMeeting);
 });
 
 infinityClientSignals.onPeerDisconnect.add(async () => {
@@ -107,14 +128,28 @@ infinityClientSignals.onPeerDisconnect.add(async () => {
 // 4. Make the call
 await infinityClient.call({
     conferenceAlias: 'meet.alice',
-    callType: 'AudioSendRecvVideoSendRecvPresentationSendRecv',
+    callType: ClientCallType.AudioSendRecvVideoSendRecvPresentationSendRecv,
     bandwidth: 1264,
     clientId: 'my-client-id',
     displayName: 'Alice',
     node: 'pexip.example.com',
+    host: 'https://pexip.example.com',
     mediaStream: media.stream,
 });
 ```
+
+### Submitting the PIN
+
+After the user enters their PIN, call `infinityClient.call()` again with the `pin` parameter:
+
+```ts
+await infinityClient.call({
+    ...originalCallArgs,
+    pin: userEnteredPin,
+});
+```
+
+You can also pass `pin` on the initial `.call()` if the user already knows it (e.g., from a join form). If the PIN is correct, the server skips `onPinRequired`. If wrong, `onError` fires with `'Invalid PIN'`.
 
 ## Non-obvious behaviors and edge cases
 
@@ -155,13 +190,17 @@ Honor the `disconnectDestination` from your branding manifest — it's how organ
 - `pexip-browser-close-confirmation` — the `beforeunload` companion to the `pagehide` handler
 - `pexip-stats-monitoring` — the `onRtcStats` handler shape used in this skill is documented in detail there
 - `pexip-live-captions` — `onLiveCaptions` events flow through this skill's event handlers
+- `pexip-pexrtc` — the PexRTC JavaScript client API (callback-based, loaded from node)
+- `pexip-rest-client-api` — raw HTTP + SSE client API (non-browser clients)
 
 ## Gotchas
 
 - **Don't `await` inside `infinityClientSignals.onMessage.add` for chat.** Server may fire the same message twice during reconnect. Use `id` for dedup.
-- **`callType` strings matter.** Use the v39+ format: `AudioSendRecvVideoSendRecvPresentationSendRecv`. Don't pass legacy numeric IDs.
+- **`callType` must be the `ClientCallType` enum, not a string.** Import `ClientCallType` from `@pexip/infinity` and pass the enum value (e.g., `ClientCallType.AudioSendRecvVideoSendRecvPresentationSendRecv` = `126`). Passing the string name silently produces `callType: None` (signaling-only, no media) because the SDK uses bitwise AND internally.
 - **`directMedia: true`** disables `presInMix` — skip the call if so (the SDK throws otherwise).
 - **`infinityClient.call()` is async, but doesn't resolve when the call connects.** It resolves when the SDK has accepted the request. Use `callSignals.onCallConnected` for "actually connected".
+- **Don't gate the `InMeeting` transition on `onRemoteStream`.** It won't fire if you're the only participant in the VMR. Use `onCallConnected` (which fires when the WebRTC call is established, regardless of other participants) for the UI state transition. Use `onRemoteStream` only for wiring the video element.
+- **Always pass `host` explicitly when developing on `http://localhost`.** The SDK builds API URLs as `${window.location.protocol}//${node}`. On localhost, this produces `http://your-pexip-node.com/...` which gets CORS-blocked when the node redirects to HTTPS. Pass `host: 'https://your-node.com'` to override.
 - **Don't unsubscribe `onTransfer` until the transfer completes.** If you tear down on `onDisconnected`, you'll miss the redirect details.
 
 ## Reference source

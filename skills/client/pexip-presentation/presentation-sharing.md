@@ -147,3 +147,4 @@ Use these to gate the "Share screen" button. Do not render it unconditionally.
 - **System audio (macOS speakers) requires Chrome + a permission.** On other browsers, the `systemAudio` constraint is silently ignored.
 - **`surfaceSwitching: 'include'`** lets the user change what they are sharing without restarting. Without it, switching from a window to a tab requires a re-prompt.
 - **`pres_slot_coords` in layout updates** indicates whether presentation is in mix (server is composing it into the layout) vs side-by-side. Use it to determine if you need to render a separate presentation tile.
+- **The SDK method is `stopPresenting()`, not `endPresent()`.** Webapp3 wraps this as `meeting.endPresent()` in its service layer. If you're calling the `InfinityClient` directly (not through webapp3's wrappers), use `infinityClient.stopPresenting()`. Calling `infinityClient.endPresent()` will throw — it doesn't exist on the SDK.

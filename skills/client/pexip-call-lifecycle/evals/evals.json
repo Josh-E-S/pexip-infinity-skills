@@ -1,62 +1,14 @@
 [
-  {
-    "query": "How do I join a Pexip meeting using @pexip/infinity and createInfinityClient?",
-    "should_trigger": true,
-    "note": "positive — explicit @pexip/infinity join flow"
-  },
-  {
-    "query": "I'm building the PIN entry screen for my Pexip app — how does onPinRequired work?",
-    "should_trigger": true,
-    "note": "positive — PIN flow in @pexip/infinity"
-  },
-  {
-    "query": "My Pexip call reconnects but the video freezes — how do I handle onPeerDisconnect and ICE restart?",
-    "should_trigger": true,
-    "note": "positive — ICE restart / peer disconnect recovery"
-  },
-  {
-    "query": "How do I build the MeetingFlow state machine for a Pexip app — Loading through InMeeting?",
-    "should_trigger": true,
-    "note": "positive — MeetingFlow state machine, explicit skill surface"
-  },
-  {
-    "query": "I need to handle IDP/SSO login before someone joins a Pexip meeting",
-    "should_trigger": true,
-    "note": "positive — IDP auth flow in join sequence"
-  },
-  {
-    "query": "How does onTransfer work for moving participants between Pexip rooms?",
-    "should_trigger": true,
-    "note": "positive — onTransfer for breakout/direct-media transitions"
-  },
-  {
-    "query": "The meeting UI shows InMeeting before the video is connected — how do I fix the state transition?",
-    "should_trigger": true,
-    "note": "positive — onCallConnected vs onRemoteStream timing bug, documented gotcha"
-  },
-  {
-    "query": "How do I use makeCall and onSetup with PexRTC to join a conference?",
-    "should_trigger": false,
-    "note": "negative — PexRTC callback API, belongs to pexip-pexrtc"
-  },
-  {
-    "query": "How do I set up createSignal and signal hubs for my Pexip app?",
-    "should_trigger": false,
-    "note": "negative — signal architecture question, belongs to pexip-signals-pattern"
-  },
-  {
-    "query": "How do I wire getUserMedia and configure the media pipeline before calling infinityClient.call()?",
-    "should_trigger": false,
-    "note": "negative — media setup layer, belongs to pexip-media-pipeline"
-  },
-  {
-    "query": "How do I join a Pexip meeting using the REST API from a Python script?",
-    "should_trigger": false,
-    "note": "negative — non-browser REST client, belongs to pexip-rest-client-api"
-  },
-  {
-    "query": "Users get spammed with error toasts when the network drops briefly during a call",
-    "should_trigger": false,
-    "note": "negative — reconnect/toast suppression UX, belongs to pexip-reconnect"
-  }
+  { "query": "How do I join a Pexip meeting using createInfinityClient and infinityClientSignals?", "should_trigger": true, "note": "positive — explicit SDK function names" },
+  { "query": "How does onPinRequired work in @pexip/infinity and how do I call client.call() again with the PIN?", "should_trigger": true, "note": "positive — explicit signal name + PIN re-call pattern" },
+  { "query": "How do I handle onPeerDisconnect in @pexip/infinity and trigger ICE restart?", "should_trigger": true, "note": "positive — explicit signal name + ICE restart" },
+  { "query": "How do I build the MeetingFlow state machine with @pexip/infinity — Loading, EnterPin, InMeeting?", "should_trigger": true, "note": "positive — explicit enum names from this skill" },
+  { "query": "How does onTransfer work in @pexip/infinity for breakout and direct-media transitions?", "should_trigger": true, "note": "positive — explicit signal name" },
+  { "query": "How do I wire onCallConnected vs onRemoteStream in @pexip/infinity for the InMeeting state transition?", "should_trigger": true, "note": "positive — explicit signal names + documented gotcha" },
+  { "query": "How do I use ClientCallType enum when calling infinityClient.call()?", "should_trigger": true, "note": "positive — explicit enum name from this skill" },
+  { "query": "How do I handle IDP auth using the onIdp signal in @pexip/infinity?", "should_trigger": true, "note": "positive — explicit signal name" },
+  { "query": "How do I use PexRTC makeCall and onSetup to join a Pexip conference?", "should_trigger": false, "note": "negative — PexRTC, belongs to pexip-pexrtc" },
+  { "query": "How do I use createSignal and signal hubs in my Pexip app?", "should_trigger": false, "note": "negative — signal architecture, belongs to pexip-signals-pattern" },
+  { "query": "How do I wire getUserMedia and createMedia before calling infinityClient.call()?", "should_trigger": false, "note": "negative — media pipeline, belongs to pexip-media-pipeline" },
+  { "query": "How do I handle useNetworkState and onReconnecting in my Pexip app?", "should_trigger": false, "note": "negative — reconnect UX, belongs to pexip-reconnect" }
 ]

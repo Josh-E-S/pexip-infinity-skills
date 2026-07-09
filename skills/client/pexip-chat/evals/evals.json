@@ -1,42 +1,11 @@
 [
-  {
-    "query": "How do I send and receive chat messages in my Pexip app?",
-    "should_trigger": true,
-    "note": "positive — sendMessage + onMessage core pattern"
-  },
-  {
-    "query": "How do I show chat messages optimistically before the server confirms them?",
-    "should_trigger": true,
-    "note": "positive — optimistic UI with pending state"
-  },
-  {
-    "query": "Chat messages sometimes appear twice after a reconnect in my Pexip app — how do I dedup?",
-    "should_trigger": true,
-    "note": "positive — dedup by id during reconnect, documented gotcha"
-  },
-  {
-    "query": "How do I implement direct (1:1) messages between participants in my Pexip app?",
-    "should_trigger": true,
-    "note": "positive — direct messages via sendMessage with recipient UUID"
-  },
-  {
-    "query": "What's the character limit for Pexip chat messages and how do I enforce it in the UI?",
-    "should_trigger": true,
-    "note": "positive — character limit enforcement"
-  },
-  {
-    "query": "How do I send a chat message in PexRTC using sendChatMessage?",
-    "should_trigger": false,
-    "note": "negative — PexRTC chat, belongs to pexip-pexrtc"
-  },
-  {
-    "query": "How do I build a participant list with mute/kick controls?",
-    "should_trigger": false,
-    "note": "negative — participant roster, belongs to pexip-participants"
-  },
-  {
-    "query": "How do I receive chat messages via the Pexip REST API SSE stream?",
-    "should_trigger": false,
-    "note": "negative — REST API message_received SSE event, belongs to pexip-rest-client-api"
-  }
+  { "query": "How do I use infinityClient.sendMessage() in @pexip/infinity to send a chat message?", "should_trigger": true, "note": "positive — explicit method name" },
+  { "query": "How does infinityClientSignals.onMessage work in @pexip/infinity for receiving chat?", "should_trigger": true, "note": "positive — explicit signal name" },
+  { "query": "How do I deduplicate chat messages using the id field in @pexip/infinity onMessage events?", "should_trigger": true, "note": "positive — explicit field + signal name, Pexip-specific dedup gotcha" },
+  { "query": "How do I use onRetryQueueFlushed in @pexip/infinity for chat retry reconciliation?", "should_trigger": true, "note": "positive — explicit signal name from this skill" },
+  { "query": "How do I implement optimistic UI for chat in a @pexip/infinity app using chatMessages state?", "should_trigger": true, "note": "positive — explicit pattern name from this skill" },
+  { "query": "How do I send a direct message to a specific participant using @pexip/infinity?", "should_trigger": true, "note": "positive — explicit SDK + DM pattern" },
+  { "query": "How do I send chat using PexRTC's sendChatMessage?", "should_trigger": false, "note": "negative — PexRTC chat, belongs to pexip-pexrtc" },
+  { "query": "How do I receive message_received events from the Pexip REST API SSE stream?", "should_trigger": false, "note": "negative — REST API events, belongs to pexip-rest-client-api" },
+  { "query": "How do I build a participant list in my Pexip app?", "should_trigger": false, "note": "negative — roster, belongs to pexip-participants" }
 ]

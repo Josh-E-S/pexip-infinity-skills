@@ -1,42 +1,10 @@
 [
-  {
-    "query": "How do I build a pre-call device selection screen for my Pexip app?",
-    "should_trigger": true,
-    "note": "positive — DevicesSelection / useDevices pre-call UI"
-  },
-  {
-    "query": "How do I show a camera preview before the user joins a Pexip meeting?",
-    "should_trigger": true,
-    "note": "positive — usePreviewController camera preview"
-  },
-  {
-    "query": "My users get a blank camera test screen — how do I handle denied camera permissions in Pexip?",
-    "should_trigger": true,
-    "note": "positive — blocked-permission UX and fallback messaging"
-  },
-  {
-    "query": "How do I let users pick their microphone and camera before joining a Pexip call?",
-    "should_trigger": true,
-    "note": "positive — device pickers useAudioInput / useVideoInput"
-  },
-  {
-    "query": "I need to show browser-specific instructions for enabling camera access in Chrome, Firefox, and Safari",
-    "should_trigger": true,
-    "note": "positive — per-browser camera permission help UX"
-  },
-  {
-    "query": "How do I configure audio and video processors for the actual call in my Pexip app?",
-    "should_trigger": false,
-    "note": "negative — in-call media pipeline, belongs to pexip-media-pipeline"
-  },
-  {
-    "query": "How do I join a Pexip meeting with infinityClient.call()?",
-    "should_trigger": false,
-    "note": "negative — call setup, belongs to pexip-call-lifecycle"
-  },
-  {
-    "query": "How do I show call quality stats during a Pexip meeting?",
-    "should_trigger": false,
-    "note": "negative — in-call stats, belongs to pexip-stats-monitoring"
-  }
+  { "query": "How do I use useDevices from @pexip/media-components to enumerate mic and camera?", "should_trigger": true, "note": "positive — explicit hook + package name" },
+  { "query": "How do I use usePreviewController in @pexip/media-components for camera preview?", "should_trigger": true, "note": "positive — explicit hook + package name" },
+  { "query": "How do I wire useAudioInput and useVideoInput in my Pexip pre-call screen?", "should_trigger": true, "note": "positive — explicit hook names" },
+  { "query": "How do I use DevicesSelection and JoinMeetingButton from @pexip/media-components?", "should_trigger": true, "note": "positive — explicit component names" },
+  { "query": "How do I handle denied camera permissions in a @pexip/media-components preflight screen?", "should_trigger": true, "note": "positive — permission handling, Pexip-specific component" },
+  { "query": "How do I configure getUserMedia constraints in my Pexip app before the call?", "should_trigger": false, "note": "negative — in-call media pipeline, belongs to pexip-media-pipeline" },
+  { "query": "How do I join a Pexip meeting using infinityClient.call()?", "should_trigger": false, "note": "negative — call setup, belongs to pexip-call-lifecycle" },
+  { "query": "How do I show call quality stats during a Pexip meeting?", "should_trigger": false, "note": "negative — in-call stats, belongs to pexip-stats-monitoring" }
 ]

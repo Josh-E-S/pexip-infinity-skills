@@ -8,6 +8,39 @@ license: MIT
 
 When a Pexip call's signaling (event source) or media (peer connection) hiccups, you get a flood of events. Without coordination, the user sees:
 - A "Failed to send" toast for every queued operation that bounced
+
+## Barebones reconnect banner
+
+Renders a banner during reconnect and suppresses error toasts for 8 seconds.
+
+```tsx
+import { useState, useEffect, useRef } from 'react';
+import { NetworkState, useNetworkState } from '@pexip/infinity';
+import type { InfinityClientSignals } from '@pexip/infinity';
+
+export function ReconnectBanner({ infinityClientSignals }: { infinityClientSignals: InfinityClientSignals }) {
+    const networkState   = useNetworkState({ infinityClientSignals });
+    const suppressUntil  = useRef(0);
+    const [reconnecting, setReconnecting] = useState(false);
+
+    useEffect(() => {
+        infinityClientSignals.onReconnecting.add(() => {
+            suppressUntil.current = Date.now() + 8000; // suppress toasts for 8s
+            setReconnecting(true);
+        });
+        infinityClientSignals.onReconnected.add(() => setReconnecting(false));
+    }, [infinityClientSignals]);
+
+    // Use suppressUntil.current in your toast handler:
+    // if (Date.now() < suppressUntil.current) return; // skip toast
+
+    if (!reconnecting) return null;
+    return (
+        <div style={{ background: '#f59e0b', color: '#000', padding: '0.5rem', textAlign: 'center', fontWeight: 600 }}>
+            Reconnecting…
+        </div>
+    );
+}
 - A "Failed to send" toast again, three more times, as the SDK retries
 - A "Reconnecting…" banner appearing and disappearing
 - Occasionally, a real "Disconnected" error buried under the noise

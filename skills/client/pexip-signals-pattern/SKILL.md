@@ -8,6 +8,45 @@ license: MIT
 
 Pexip's webapp3 doesn't store SDK state in React. It uses **`@pexip/signal`** — a typed pub/sub primitive — as the spine connecting `@pexip/infinity`, `@pexip/media`, and the UI. Service modules emit signals, components subscribe. This is why webapp3 stays responsive during reconnect, transfer, and noisy event streams.
 
+## Barebones signal hub
+
+Copy this as `src/signals.ts`. Every feature (call, chat, roster, presentation) imports from here — define new signals here rather than inline in components.
+
+```ts
+import { createSignal } from '@pexip/signal';
+
+// ── Call state ────────────────────────────────────────────────────────────────
+// variant: 'behavior' = new subscribers get the current value immediately on subscribe
+export const meetingStepSignal  = createSignal<string>({ name: 'meeting:step', variant: 'behavior' });
+export const remoteStreamSignal = createSignal<MediaStream | undefined>({ name: 'meeting:remoteStream', variant: 'behavior' });
+export const localStreamSignal  = createSignal<MediaStream | undefined>({ name: 'meeting:localStream',  variant: 'behavior' });
+
+// ── Auth ──────────────────────────────────────────────────────────────────────
+// generic (no variant) = one-shot events; only fires to subscribers alive at emit time
+export const pinRequiredSignal  = createSignal<boolean>({ name: 'meeting:pinRequired' });
+export const idpRequiredSignal  = createSignal<string>({ name: 'meeting:idpRequired' });
+
+// ── Roster ────────────────────────────────────────────────────────────────────
+export const participantsSignal = createSignal<Map<string, unknown>>({ name: 'meeting:participants', variant: 'behavior' });
+
+// ── Presentation ──────────────────────────────────────────────────────────────
+export const presentationStreamSignal = createSignal<MediaStream | undefined>({ name: 'meeting:presentation', variant: 'behavior' });
+
+// ── Chat ──────────────────────────────────────────────────────────────────────
+export const chatMessagesSignal = createSignal<unknown[]>({ name: 'meeting:chat', variant: 'behavior' });
+```
+
+**Rule:** use `variant: 'behavior'` for any signal a component needs on mount (streams, current step, roster). Use default `generic` for one-shot events (PIN prompt, errors, transfer).
+
+To subscribe in a React component:
+
+```ts
+useEffect(() => {
+    const unsub = remoteStreamSignal.add(stream => setStream(stream));
+    return () => unsub();
+}, []);
+```
+
 If you're building on `@pexip/infinity` and reaching for `useState` to mirror SDK state, **stop and read this first**.
 
 ## Why signals, not React state

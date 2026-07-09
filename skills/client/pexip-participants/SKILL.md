@@ -8,6 +8,52 @@ license: MIT
 
 The participants list seems simple — *show users in the meeting* — but webapp3's implementation is the most architecturally dense file in the project. Reasons:
 
+## Barebones participant list
+
+Complete working roster component with mute, kick, and admit. Import `infinityClientSignals` and `callSignals` from your signal setup (see `pexip-call-lifecycle`).
+
+```tsx
+import { useEffect, useState } from 'react';
+import { createInMeetingParticipants } from '@pexip/infinity';
+import type { InfinityClient, InfinityClientSignals, CallSignals } from '@pexip/infinity';
+
+interface Props {
+    client: InfinityClient;
+    infinityClientSignals: InfinityClientSignals;
+    callSignals: CallSignals;
+}
+
+export function ParticipantList({ client, infinityClientSignals, callSignals }: Props) {
+    const [list, setList] = useState<any[]>([]);
+
+    useEffect(() => {
+        const { participants, cleanup } = createInMeetingParticipants({ infinityClientSignals, callSignals });
+        const unsub = participants.subscribe(map => setList(Array.from(map.values())));
+        return () => { unsub(); cleanup(); };
+    }, [infinityClientSignals, callSignals]);
+
+    return (
+        <ul>
+            {list.map((p: any) => (
+                <li key={p.uuid}>
+                    <span>{p.displayName} ({p.role}){p.isAudioMuted ? ' 🔇' : ''}</span>
+                    {p.serviceType === 'waiting_room' && (
+                        <button onClick={() => void client.admitParticipant({ participantUuid: p.uuid })}>
+                            Admit
+                        </button>
+                    )}
+                    <button onClick={() => void client.muteParticipant({ participantUuid: p.uuid, muteAudio: !p.isAudioMuted })}>
+                        {p.isAudioMuted ? 'Unmute' : 'Mute'}
+                    </button>
+                    <button onClick={() => void client.disconnectParticipant({ participantUuid: p.uuid })}>
+                        Kick
+                    </button>
+                </li>
+            ))}
+        </ul>
+    );
+}
+
 - A participant has 5+ orthogonal axes (host/guest, in-meeting/external/lobby/transferring, raised-hand, can-fecc, supports-direct-chat)
 - The UI needs *filtered, sorted, searched, and cached* projections of these
 - Breakout rooms add another dimension (every group has a breakout variant)

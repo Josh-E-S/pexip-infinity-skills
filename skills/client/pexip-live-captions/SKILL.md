@@ -8,6 +8,40 @@ license: MIT
 
 Pexip's MCU produces real-time transcripts via the conferencing node's speech engine. The signaling channel emits `onLiveCaptions` events with `{data, isFinal, speakers}`. Webapp3's `useLiveCaptions` hook turns this into a flickerless caption overlay with auto-clear.
 
+## Barebones live captions overlay
+
+Drop this over your video element. Auto-clears 3 seconds after a final transcript.
+
+```tsx
+import { useState, useEffect, useRef } from 'react';
+import type { InfinityClientSignals } from '@pexip/infinity';
+
+export function LiveCaptions({ infinityClientSignals }: { infinityClientSignals: InfinityClientSignals }) {
+    const [caption, setCaption] = useState('');
+    const clearTimer = useRef<ReturnType<typeof setTimeout>>();
+
+    useEffect(() => {
+        infinityClientSignals.onLiveCaptions.add((msg: { data: string; isFinal: boolean }) => {
+            setCaption(msg.data);
+            clearTimeout(clearTimer.current);
+            if (msg.isFinal) {
+                clearTimer.current = setTimeout(() => setCaption(''), 3000);
+            }
+        });
+    }, [infinityClientSignals]);
+
+    if (!caption) return null;
+    return (
+        <div style={{
+            position: 'absolute', bottom: 60, left: 0, right: 0,
+            textAlign: 'center', background: 'rgba(0,0,0,0.6)',
+            color: '#fff', padding: '0.5rem', fontSize: '1rem',
+        }}>
+            {caption}
+        </div>
+    );
+}
+
 The trick is that captions arrive as a **stream of refinements**: the engine sends interim text ("hello there"), then a longer interim ("hello there how are"), then finally `isFinal: true` ("hello there, how are you"). Render naïvely and the caption flashes between revisions. Webapp3's hook handles this.
 
 ## Quick start

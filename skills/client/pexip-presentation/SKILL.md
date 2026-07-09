@@ -8,6 +8,58 @@ license: MIT
 
 Pexip's presentation flow is *two* media tracks (your camera + your screen) negotiated through the same peer connection, with separate content hints, separate quality settings, and a separate audio mix. It also has to survive ICE restart so a network blip doesn't terminate your screenshare.
 
+## Barebones screenshare
+
+Complete working screenshare + incoming presentation component using `usePresentation`.
+
+```tsx
+import { useRef, useState } from 'react';
+import { usePresentation } from '@pexip/media-components';
+import { getDisplayMedia } from '@pexip/media';
+import type { InfinityClient } from '@pexip/infinity';
+
+interface Props { client: InfinityClient; callSignals: any; }
+
+export function PresentationControls({ client, callSignals }: Props) {
+    const presRef = useRef<HTMLVideoElement>(null);
+    const [sharing, setSharing] = useState(false);
+
+    const presentation = usePresentation({
+        client,
+        callSignals,
+        send: true,
+        recv: true,
+        stopPresentation: () => void client.stopPresenting(),
+        handleGetDisplayMedia: getDisplayMedia,
+        handlaGetDisplayMediaError: err => console.error('Screen share error:', err),
+    });
+
+    // Show incoming presentation OR local preview — presenter sees their own share
+    const activeStream = presentation.remotePresentationStream ?? presentation.localMediaStream;
+
+    return (
+        <div>
+            {activeStream && (
+                <video
+                    autoPlay
+                    playsInline
+                    ref={el => { if (el) el.srcObject = activeStream; }}
+                    style={{ width: '100%' }}
+                />
+            )}
+            <button
+                onClick={() => {
+                    if (sharing) { presentation.stopPresentation(); setSharing(false); }
+                    else { presentation.startPresentation(); setSharing(true); }
+                }}
+                disabled={!presentation.presentationCapability?.send}
+            >
+                {sharing ? 'Stop sharing' : 'Share screen'}
+            </button>
+        </div>
+    );
+}
+
 This skill captures the working setup. Most of the heavy lifting is in `@pexip/media-components`'s `usePresentation` hook — webapp3 wraps it with the few app-specific pieces.
 
 ## The pieces

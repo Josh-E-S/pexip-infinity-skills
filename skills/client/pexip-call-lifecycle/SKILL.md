@@ -8,6 +8,99 @@ license: MIT
 
 Joining a Pexip meeting is **not** "call this function and you're in." There are 6 call stages, ~30 event handlers, a join-flow state machine with 7+ steps, and several invariants that webapp3 has fought through in production. This skill captures the shape that actually works.
 
+## Barebones working app
+
+Complete minimal scaffold using `@pexip/infinity`. Fill in `NODE`, `ALIAS`, `DISPLAY_NAME` and it works. Expand per-feature using the sections below and sibling skills.
+
+```tsx
+// signals.ts — create once, import everywhere
+import { createSignal } from '@pexip/signal';
+
+export const remoteStreamSignal = createSignal<MediaStream | undefined>({ name: 'call:remoteStream', variant: 'behavior' });
+export const stepSignal         = createSignal<string>({ name: 'call:step', variant: 'behavior' });
+export const pinRequiredSignal  = createSignal<boolean>({ name: 'call:pinRequired' });
+```
+
+```tsx
+// PexipCall.tsx
+import { useEffect, useRef, useState } from 'react';
+import {
+    createInfinityClient,
+    createInfinityClientSignals,
+    createCallSignals,
+    ClientCallType,
+} from '@pexip/infinity';
+import { remoteStreamSignal, stepSignal, pinRequiredSignal } from './signals';
+
+const infinityClientSignals = createInfinityClientSignals([]);
+const callSignals           = createCallSignals([]);
+
+export function PexipCall({ node, alias, displayName }: { node: string; alias: string; displayName: string }) {
+    const videoRef    = useRef<HTMLVideoElement>(null);
+    const clientRef   = useRef<ReturnType<typeof createInfinityClient> | null>(null);
+    const callArgsRef = useRef<object>({});
+    const [pin, setPin]               = useState('');
+    const [pinVisible, setPinVisible] = useState(false);
+
+    useEffect(() => {
+        const client = createInfinityClient({ infinityClientSignals, callSignals });
+        clientRef.current = client;
+
+        infinityClientSignals.onPinRequired.add(() => setPinVisible(true));
+
+        infinityClientSignals.onCallConnected.add(() => {
+            stepSignal.emit('InMeeting');
+            setPinVisible(false);
+        });
+
+        infinityClientSignals.onPeerDisconnect.add(async () => {
+            await client.call(callArgsRef.current as any); // ICE restart
+        });
+
+        infinityClientSignals.onDisconnected.add(() => {
+            stepSignal.emit('Idle');
+            if (videoRef.current) videoRef.current.srcObject = null;
+        });
+
+        callSignals.onRemoteStream.add(stream => {
+            remoteStreamSignal.emit(stream);
+            if (videoRef.current) videoRef.current.srcObject = stream ?? null;
+        });
+
+        const args = {
+            conferenceAlias: alias,
+            callType: ClientCallType.AudioSendRecvVideoSendRecvPresentationSendRecv,
+            bandwidth: 1264,
+            displayName,
+            node,
+            host: `https://${node}`,
+        };
+        callArgsRef.current = args;
+        stepSignal.emit('Loading');
+        void client.call(args);
+
+        return () => { void client.disconnect(); };
+    }, [node, alias, displayName]);
+
+    const submitPin = () => {
+        setPinVisible(false);
+        void clientRef.current?.call({ ...callArgsRef.current as any, pin });
+    };
+
+    return (
+        <div>
+            <video ref={videoRef} autoPlay playsInline style={{ width: '100%', background: '#000' }} />
+            {pinVisible && (
+                <div>
+                    <input type="password" value={pin} onChange={e => setPin(e.target.value)} placeholder="Enter PIN" />
+                    <button onClick={submitPin}>Join</button>
+                </div>
+            )}
+        </div>
+    );
+}
+```
+
 ## Which SDK is this?
 
 These skills cover **`@pexip/infinity`** — the modular TypeScript SDK that Pexip's own webapp3 is built on. It uses typed signals, `createInfinityClient`, and `infinityClientSignals`.

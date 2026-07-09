@@ -8,6 +8,51 @@ license: MIT
 
 Pexip's chat is signaling-channel chat, not a separate WebSocket. Messages flow through the same event source as everything else — which means they share the same retry/queue/reconnect machinery. This is good (chat survives ICE restart automatically) but introduces edge cases (server may dedup, queue, or drop messages during reconnect).
 
+## Barebones chat component
+
+```tsx
+import { useState, useEffect } from 'react';
+import type { InfinityClient, InfinityClientSignals } from '@pexip/infinity';
+
+interface Msg { id: string; origin: string; payload: string; }
+
+interface Props { client: InfinityClient; infinityClientSignals: InfinityClientSignals; }
+
+export function Chat({ client, infinityClientSignals }: Props) {
+    const [messages, setMessages] = useState<Msg[]>([]);
+    const [text, setText] = useState('');
+
+    useEffect(() => {
+        infinityClientSignals.onMessage.add((msg: Msg) => {
+            setMessages(prev => {
+                if (prev.some(m => m.id === msg.id)) return prev; // dedup on reconnect
+                return [...prev, msg];
+            });
+        });
+    }, [infinityClientSignals]);
+
+    const send = () => {
+        if (!text.trim()) return;
+        void client.sendMessage({ payload: text });
+        setText('');
+    };
+
+    return (
+        <div>
+            <div style={{ height: 200, overflowY: 'auto' }}>
+                {messages.map(m => <p key={m.id}><b>{m.origin}:</b> {m.payload}</p>)}
+            </div>
+            <input
+                value={text}
+                onChange={e => setText(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && send()}
+                placeholder="Message…"
+            />
+            <button onClick={send}>Send</button>
+        </div>
+    );
+}
+
 Webapp3 handles these correctly with **optimistic UI + retry-queue reconciliation**. This skill captures that pattern.
 
 ## Sending: optimistic add, then reconcile

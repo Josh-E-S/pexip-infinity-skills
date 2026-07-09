@@ -8,6 +8,53 @@ license: MIT
 
 The preflight screen is the gauntlet between "user clicked a meeting link" and "user is in the call." Webapp3 handles a surprising amount here: device enumeration with hot-swap detection, permission prompts that can fail in 5+ different ways, mic/camera test, fallback notifications when devices vanish, blocked-permission help screens with browser-specific instructional videos, and a separate preview pipeline so effects like blur work *before* the main media pipeline starts.
 
+## Barebones pre-call screen
+
+Device pickers, camera preview, and a join button. `onJoin` receives the selected device IDs — pass them to your media pipeline.
+
+```tsx
+import { useDevices, usePreviewController } from '@pexip/media-components';
+
+interface Props { onJoin: (audioDeviceId: string, videoDeviceId: string) => void; }
+
+export function PreCallScreen({ onJoin }: Props) {
+    const {
+        audioInputs, videoInputs,
+        selectedAudioInput, selectedVideoInput,
+        selectAudioInput, selectVideoInput,
+    } = useDevices();
+
+    const { previewStream } = usePreviewController({ videoDeviceId: selectedVideoInput });
+
+    return (
+        <div>
+            <video
+                autoPlay playsInline muted
+                ref={el => { if (el) el.srcObject = previewStream ?? null; }}
+                style={{ width: 320, background: '#000' }}
+            />
+
+            <label>
+                Microphone
+                <select value={selectedAudioInput} onChange={e => selectAudioInput(e.target.value)}>
+                    {audioInputs.map(d => <option key={d.deviceId} value={d.deviceId}>{d.label || 'Mic'}</option>)}
+                </select>
+            </label>
+
+            <label>
+                Camera
+                <select value={selectedVideoInput} onChange={e => selectVideoInput(e.target.value)}>
+                    {videoInputs.map(d => <option key={d.deviceId} value={d.deviceId}>{d.label || 'Camera'}</option>)}
+                </select>
+            </label>
+
+            <button onClick={() => onJoin(selectedAudioInput, selectedVideoInput)}>
+                Join meeting
+            </button>
+        </div>
+    );
+}
+
 This skill captures the right structure. The deep details live in the parent `pexip-media-pipeline` skill (`createMedia` setup) — preflight is mostly about the **UI hooks** that `@pexip/media-components` provides, plus the browser-detection pattern.
 
 ## The two flows: Express vs Standard

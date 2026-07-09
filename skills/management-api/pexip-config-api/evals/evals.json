@@ -1,52 +1,12 @@
 [
-  {
-    "query": "How do I create a new VMR in Pexip using the management API?",
-    "should_trigger": true,
-    "note": "positive — conference CRUD via /api/admin/configuration/v1/"
-  },
-  {
-    "query": "How do I add a conference alias to an existing Pexip VMR?",
-    "should_trigger": true,
-    "note": "positive — conference_alias configuration"
-  },
-  {
-    "query": "How do I create Pexip end users and set their PINs through the MCP server?",
-    "should_trigger": true,
-    "note": "positive — end_user CRUD"
-  },
-  {
-    "query": "How do I add a gateway routing rule in Pexip to handle SIP calls?",
-    "should_trigger": true,
-    "note": "positive — gateway_routing_rule configuration"
-  },
-  {
-    "query": "How do I configure an LDAP sync source in Pexip?",
-    "should_trigger": true,
-    "note": "positive — ldap_sync_source config"
-  },
-  {
-    "query": "How do I add a Conferencing Node to the Pexip deployment?",
-    "should_trigger": true,
-    "note": "positive — worker_vm / system_location configuration"
-  },
-  {
-    "query": "How do I kick a participant from a live Pexip conference?",
-    "should_trigger": false,
-    "note": "negative — runtime command, belongs to pexip-command-api"
-  },
-  {
-    "query": "How do I check how many participants are currently in a Pexip conference?",
-    "should_trigger": false,
-    "note": "negative — live state read, belongs to pexip-status-api"
-  },
-  {
-    "query": "How do I get a report of all calls that happened in Pexip last week?",
-    "should_trigger": false,
-    "note": "negative — post-call history, belongs to pexip-history-api"
-  },
-  {
-    "query": "How do I configure event sinks in Pexip to get webhook notifications?",
-    "should_trigger": false,
-    "note": "negative — event_sink is in config API but the integration pattern belongs to pexip-event-sinks"
-  }
+  { "query": "How do I use /api/admin/configuration/v1/conference/ to create a Pexip VMR?", "should_trigger": true, "note": "positive — explicit config API path" },
+  { "query": "How do I add a conference_alias to an existing Pexip VMR via the config API?", "should_trigger": true, "note": "positive — explicit resource name" },
+  { "query": "How do I use create_end_user in the Pexip MCP server to add a user?", "should_trigger": true, "note": "positive — explicit MCP tool name" },
+  { "query": "How do I configure a gateway_routing_rule in Pexip to route SIP calls?", "should_trigger": true, "note": "positive — explicit resource name" },
+  { "query": "How do I use list_conferences and get_conference in the Pexip MCP server?", "should_trigger": true, "note": "positive — explicit MCP tool names" },
+  { "query": "How do I configure an ldap_sync_source in Pexip via the management API?", "should_trigger": true, "note": "positive — explicit resource name" },
+  { "query": "How do I configure a worker_vm (Conferencing Node) in the Pexip configuration API?", "should_trigger": true, "note": "positive — explicit resource name" },
+  { "query": "How do I kick a participant from a live Pexip conference?", "should_trigger": false, "note": "negative — runtime command, belongs to pexip-command-api" },
+  { "query": "How do I read live participant state from a Pexip conference?", "should_trigger": false, "note": "negative — live state, belongs to pexip-status-api" },
+  { "query": "How do I get call history reports from Pexip?", "should_trigger": false, "note": "negative — history, belongs to pexip-history-api" }
 ]

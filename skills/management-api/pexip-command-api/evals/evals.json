@@ -1,52 +1,13 @@
 [
-  {
-    "query": "How do I kick a participant from a live Pexip conference using the management API?",
-    "should_trigger": true,
-    "note": "positive — participant/disconnect command endpoint"
-  },
-  {
-    "query": "How do I mute all guests in a Pexip conference from an MCP tool?",
-    "should_trigger": true,
-    "note": "positive — conference/mute_guests command"
-  },
-  {
-    "query": "How do I lock a Pexip conference so no new participants can join?",
-    "should_trigger": true,
-    "note": "positive — conference/lock command"
-  },
-  {
-    "query": "How do I dial out to a SIP endpoint from a live Pexip conference?",
-    "should_trigger": true,
-    "note": "positive — participant/dial command"
-  },
-  {
-    "query": "How do I change the layout of a live Pexip conference using the command API?",
-    "should_trigger": true,
-    "note": "positive — conference/transform_layout command"
-  },
-  {
-    "query": "How do I transfer a participant to a different Pexip VMR during a live call?",
-    "should_trigger": true,
-    "note": "positive — participant transfer command"
-  },
-  {
-    "query": "How do I read who is currently in a Pexip conference right now?",
-    "should_trigger": false,
-    "note": "negative — live state read, belongs to pexip-status-api"
-  },
-  {
-    "query": "How do I create a new VMR in Pexip using the configuration API?",
-    "should_trigger": false,
-    "note": "negative — persistent config, belongs to pexip-config-api"
-  },
-  {
-    "query": "How do I get call quality data for a Pexip conference that ended yesterday?",
-    "should_trigger": false,
-    "note": "negative — post-call history, belongs to pexip-history-api"
-  },
-  {
-    "query": "How do I mute a participant using PexRTC?",
-    "should_trigger": false,
-    "note": "negative — PexRTC client-side mute, belongs to pexip-pexrtc"
-  }
+  { "query": "How do I use participant/disconnect in the Pexip command API to kick someone?", "should_trigger": true, "note": "positive — explicit endpoint name" },
+  { "query": "How do I call conference/mute_guests via the Pexip command API?", "should_trigger": true, "note": "positive — explicit endpoint name" },
+  { "query": "How do I use /api/admin/command/v1/ to lock a Pexip conference?", "should_trigger": true, "note": "positive — explicit API path" },
+  { "query": "How do I dial out a SIP participant using participant/dial in the Pexip command API?", "should_trigger": true, "note": "positive — explicit endpoint + protocol" },
+  { "query": "How do I use conference/transform_layout to change the layout of a live Pexip meeting?", "should_trigger": true, "note": "positive — explicit endpoint name" },
+  { "query": "How do I use set_role to promote a Pexip participant to host via the command API?", "should_trigger": true, "note": "positive — explicit MCP tool name" },
+  { "query": "How do I use disconnect_participant in the Pexip MCP server?", "should_trigger": true, "note": "positive — explicit MCP tool name" },
+  { "query": "How do I read the current participant list for a live Pexip conference?", "should_trigger": false, "note": "negative — read not command, belongs to pexip-status-api" },
+  { "query": "How do I create a new VMR using the Pexip configuration API?", "should_trigger": false, "note": "negative — persistent config, belongs to pexip-config-api" },
+  { "query": "How do I get CDR data for calls that happened last week in Pexip?", "should_trigger": false, "note": "negative — history, belongs to pexip-history-api" },
+  { "query": "How do I configure a Pexip event sink to receive webhook events?", "should_trigger": false, "note": "negative — event config, belongs to pexip-event-sinks" }
 ]

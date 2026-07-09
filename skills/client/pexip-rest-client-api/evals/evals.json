@@ -1,63 +1,53 @@
 [
   {
-    "query": "I'm building a native Android app that needs to join Pexip meetings — how do I authenticate and connect?",
-    "should_trigger": true,
-    "note": "positive — native mobile, request_token auth flow"
-  },
-  {
-    "query": "I'm writing a Python script that joins a Pexip conference and kicks participants who have been idle",
-    "should_trigger": true,
-    "note": "positive — server-side bot, REST control endpoints"
-  },
-  {
-    "query": "I need to receive real-time Pexip participant events in a server-side Node.js process",
-    "should_trigger": true,
-    "note": "positive — SSE event stream from non-browser server context"
-  },
-  {
-    "query": "I'm building a CLI tool that can lock Pexip conferences and disconnect specific participants",
-    "should_trigger": true,
-    "note": "positive — CLI tool, REST control endpoints"
-  },
-  {
-    "query": "I'm building a desktop Electron app that needs to connect to Pexip — what API should I use?",
-    "should_trigger": true,
-    "note": "positive — desktop/Electron, non-browser context"
-  },
-  {
-    "query": "I want to build a Pexip monitoring bot in Python that alerts when a conference has been running for over an hour",
-    "should_trigger": true,
-    "note": "positive — server-side monitoring bot, goal-first task language"
-  },
-  {
-    "query": "How do I build a Go service that joins a Pexip meeting and listens for participant events?",
-    "should_trigger": true,
-    "note": "positive — non-JS language, server-side, SSE event stream"
-  },
-  {
     "query": "How does the Pexip /api/client/v2/ token auth work? I need to get a token, refresh it, and release it on disconnect.",
     "should_trigger": true,
-    "note": "positive — explicit REST API token lifecycle"
+    "note": "positive — explicit REST API token lifecycle, Pexip-specific"
   },
   {
-    "query": "How do I submit an SDP offer to Pexip and get back the SDP answer without using PexRTC?",
+    "query": "How do I submit an SDP offer to Pexip and get back the SDP answer using the REST API?",
     "should_trigger": true,
-    "note": "positive — raw SDP/ICE exchange via /calls endpoint"
+    "note": "positive — explicit SDP/ICE exchange via /calls endpoint"
   },
   {
-    "query": "I need to signal presentation start and stop in my Pexip integration without using PexRTC",
+    "query": "Why do I need to POST to /ack after getting the SDP answer from Pexip?",
     "should_trigger": true,
-    "note": "positive — take_floor/release_floor REST endpoints"
+    "note": "positive — Pexip-specific /ack requirement, gotcha that trips developers"
+  },
+  {
+    "query": "How do I handle PIN authentication in the Pexip REST client API — which header do I use?",
+    "should_trigger": true,
+    "note": "positive — PIN via HTTP header on request_token, Pexip-specific"
   },
   {
     "query": "What events does the Pexip SSE stream send? I need participant_create, presentation_start, and message_received.",
     "should_trigger": true,
-    "note": "positive — SSE event stream enumeration"
+    "note": "positive — explicit SSE event stream enumeration, Pexip-specific"
   },
   {
-    "query": "How do I handle PIN authentication in the Pexip REST client API?",
+    "query": "How do I open the Pexip SSE event stream and parse the participant_create events in Python?",
     "should_trigger": true,
-    "note": "positive — PIN via HTTP header on request_token"
+    "note": "positive — SSE stream + explicit Pexip event types"
+  },
+  {
+    "query": "How do I signal presentation start and stop using take_floor and release_floor in the Pexip REST API?",
+    "should_trigger": true,
+    "note": "positive — explicit Pexip REST screenshare endpoints"
+  },
+  {
+    "query": "How do I refresh a Pexip participant token before it expires?",
+    "should_trigger": true,
+    "note": "positive — refresh_token lifecycle, Pexip-specific"
+  },
+  {
+    "query": "The Pexip REST API returns 403 when I try to join a PIN-protected conference — how do I pass the PIN?",
+    "should_trigger": true,
+    "note": "positive — 403 + PIN debugging, Pexip-specific error"
+  },
+  {
+    "query": "How does trickle ICE work with the Pexip /new_candidate endpoint?",
+    "should_trigger": true,
+    "note": "positive — explicit Pexip ICE candidate endpoint"
   },
   {
     "query": "How do I use PexRTC to join a Pexip meeting in my web app?",
@@ -65,14 +55,14 @@
     "note": "negative — explicit PexRTC browser SDK, belongs to pexip-pexrtc"
   },
   {
-    "query": "I want to build a telemedicine web app with Pexip video",
-    "should_trigger": false,
-    "note": "negative — browser web app, belongs to pexip-pexrtc"
-  },
-  {
     "query": "How do I use createInfinityClient from @pexip/infinity to join a meeting?",
     "should_trigger": false,
     "note": "negative — @pexip/infinity npm SDK, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "How do I use onSetup and connect() in PexRTC to handle PIN entry?",
+    "should_trigger": false,
+    "note": "negative — PexRTC PIN flow, belongs to pexip-pexrtc"
   },
   {
     "query": "I need Pexip to POST call events to my webhook when conferences start and end",
@@ -85,8 +75,8 @@
     "note": "negative — admin management API, belongs to pexip-command-api"
   },
   {
-    "query": "My Pexip node is showing high participant counts — how do I investigate using the status API?",
+    "query": "How do I use infinityClientSignals and onPinRequired in my Pexip app?",
     "should_trigger": false,
-    "note": "negative — management status API, belongs to pexip-status-api"
+    "note": "negative — @pexip/infinity signals, belongs to pexip-call-lifecycle"
   }
 ]

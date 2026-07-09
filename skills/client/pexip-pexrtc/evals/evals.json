@@ -1,88 +1,78 @@
 [
   {
-    "query": "I want to add Pexip video calling to my website. What's the quickest way to get started?",
-    "should_trigger": true,
-    "note": "positive — open-ended browser integration ask, no SDK named, 95% case"
-  },
-  {
-    "query": "I want to build a telemedicine web app with Pexip video — where do I start?",
-    "should_trigger": true,
-    "note": "positive — goal-first domain ask (telehealth), browser context implied"
-  },
-  {
-    "query": "How does Pexip call negotiation work in the browser?",
-    "should_trigger": true,
-    "note": "positive — conceptual question about call setup, PexRTC is the browser answer"
-  },
-  {
-    "query": "My call is connected but there's no video — the other side can't see me. What could cause that in Pexip?",
-    "should_trigger": true,
-    "note": "positive — media debugging symptom, classic onConnect/stream wiring issue in PexRTC"
-  },
-  {
-    "query": "I want to plan out a progressive web app with Pexip — it needs chat, raised hands, screenshare, and layout options",
-    "should_trigger": true,
-    "note": "positive — feature planning ask covering multiple PexRTC surfaces"
-  },
-  {
-    "query": "My Pexip call isn't connecting — the call seems to start but never reaches the meeting",
-    "should_trigger": true,
-    "note": "positive — connection debugging, makeCall/onSetup/connect flow"
-  },
-  {
     "query": "How do I load PexRTC and make a call to a Pexip VMR?",
     "should_trigger": true,
-    "note": "positive — explicit PexRTC + makeCall"
+    "note": "positive — explicit PexRTC + makeCall, direct API question"
   },
   {
-    "query": "My Pexip web app is stuck on the PIN screen — onSetup keeps firing but connect() doesn't seem to work",
+    "query": "My Pexip web app is stuck on the PIN screen — onSetup keeps firing but connect() doesn't work",
     "should_trigger": true,
-    "note": "positive — symptom-led PIN/onSetup debugging"
+    "note": "positive — explicit onSetup/connect debugging, Pexip-specific"
   },
   {
-    "query": "How do I show the remote video stream from a Pexip call in a browser?",
+    "query": "How do I wire the remote video stream from a Pexip call to a video element?",
     "should_trigger": true,
-    "note": "positive — onConnect stream wiring to a video element"
-  },
-  {
-    "query": "I need to mute all guests and lock the conference from my web app — what Pexip API calls do I use?",
-    "should_trigger": true,
-    "note": "positive — host controls, setMuteAllGuests/setConferenceLock"
-  },
-  {
-    "query": "How do I build a participant list that updates in real time for a Pexip meeting?",
-    "should_trigger": true,
-    "note": "positive — onParticipantCreate/Update/Delete roster"
-  },
-  {
-    "query": "I want to let users share their screen in my Pexip web app",
-    "should_trigger": true,
-    "note": "positive — present('screen') + onScreenshareConnected"
-  },
-  {
-    "query": "How do I receive the incoming presentation stream in my Pexip browser client?",
-    "should_trigger": true,
-    "note": "positive — getPresentation() + onPresentationConnected"
+    "note": "positive — onConnect stream wiring, Pexip-specific"
   },
   {
     "query": "Can I use PexRTC in a React app? How do I wire it up with hooks?",
     "should_trigger": true,
-    "note": "positive — React integration pattern"
-  },
-  {
-    "query": "My Pexip call drops and I need to detect when the server disconnects the user",
-    "should_trigger": true,
-    "note": "positive — onDisconnect / onError handling"
+    "note": "positive — explicit PexRTC + React integration"
   },
   {
     "query": "How do I switch the camera mid-call in my Pexip web app without hanging up?",
     "should_trigger": true,
-    "note": "positive — video_source + renegotiate(false)"
+    "note": "positive — renegotiate(false), Pexip-specific mid-call device change"
   },
   {
-    "query": "I need to send a chat message to all participants in a Pexip conference from my web app",
+    "query": "How do I use onParticipantCreate and onParticipantDelete to build a Pexip participant list?",
     "should_trigger": true,
-    "note": "positive — sendChatMessage broadcast"
+    "note": "positive — explicit PexRTC roster callbacks"
+  },
+  {
+    "query": "How does PexRTC handle PIN authentication — what does onSetup return and how do I call connect()?",
+    "should_trigger": true,
+    "note": "positive — explicit PexRTC PIN flow, Pexip-specific"
+  },
+  {
+    "query": "How do I start and stop screen sharing in PexRTC?",
+    "should_trigger": true,
+    "note": "positive — present('screen') + explicit PexRTC"
+  },
+  {
+    "query": "How does call negotiation work in PexRTC — makeCall, onSetup, connect, onConnect flow?",
+    "should_trigger": true,
+    "note": "positive — explicit PexRTC call flow question"
+  },
+  {
+    "query": "My Pexip call connects but onConnect fires with a null stream — why is there no video?",
+    "should_trigger": true,
+    "note": "positive — Pexip-specific null stream gotcha (roster-only session), explicit PexRTC behavior"
+  },
+  {
+    "query": "How do I use setMuteAllGuests and setConferenceLock in PexRTC?",
+    "should_trigger": true,
+    "note": "positive — explicit PexRTC host controls"
+  },
+  {
+    "query": "How do I send and receive chat messages using PexRTC's sendChatMessage and onChatMessage?",
+    "should_trigger": true,
+    "note": "positive — explicit PexRTC chat API"
+  },
+  {
+    "query": "How do I use createBreakout and moveToBreakout in PexRTC?",
+    "should_trigger": true,
+    "note": "positive — explicit PexRTC breakout API"
+  },
+  {
+    "query": "How do I configure STUN and TURN servers in PexRTC before makeCall?",
+    "should_trigger": true,
+    "note": "positive — explicit PexRTC STUN/TURN config"
+  },
+  {
+    "query": "onSetup keeps re-firing in my Pexip app after I call connect() — what's causing the loop?",
+    "should_trigger": true,
+    "note": "positive — onSetup re-fire gotcha, Pexip-specific behavior"
   },
   {
     "query": "How do I build a Pexip app using @pexip/infinity and createInfinityClient?",
@@ -118,10 +108,5 @@
     "query": "How do I add a VMR in Pexip and configure dial-in numbers?",
     "should_trigger": false,
     "note": "negative — admin config, belongs to pexip-config-api"
-  },
-  {
-    "query": "Can I use SDP and ICE candidates directly with Pexip instead of a JS library?",
-    "should_trigger": false,
-    "note": "negative — raw WebRTC / REST approach, belongs to pexip-rest-client-api"
   }
 ]

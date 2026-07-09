@@ -1,57 +1,77 @@
 [
   {
-    "query": "How can I subscribe to Pexip SSEs?",
+    "query": "How do I configure a Pexip event sink to POST webhook events to my server?",
     "should_trigger": true,
-    "note": "positive — common misconception (it's webhooks, not SSE); skill should still trigger and correct"
+    "note": "positive — explicit event sink config via MCP"
   },
   {
-    "query": "What are Pexip events?",
+    "query": "What's the shape of the Pexip event sink message envelope — node, seq, event, data?",
     "should_trigger": true,
-    "note": "positive — bare orientation question, how a new admin first asks"
+    "note": "positive — explicit envelope fields, Pexip-specific"
   },
   {
-    "query": "Build a web app that alerts me when calls start and end on Pexip.",
+    "query": "How do I handle eventsink_bulk payloads in my Pexip webhook receiver?",
     "should_trigger": true,
-    "note": "positive — app-builder task, no Pexip jargon at all"
+    "note": "positive — bulk envelope handling, Pexip-specific"
   },
   {
-    "query": "How do I create a notification panel in my app from Pexip events?",
+    "query": "My Pexip webhook receiver is getting duplicate events — how do I deduplicate on node and seq?",
     "should_trigger": true,
-    "note": "positive — receiver-side dev task"
+    "note": "positive — (node, seq) dedup, Pexip-specific gotcha"
   },
   {
-    "query": "I need real-time call records from Pexip, not a nightly pull. What should I use?",
+    "query": "How do I move from polling the Pexip History API to receiving real-time push events?",
     "should_trigger": true,
-    "note": "positive — symptom-led, the canonical 'move from polling' story in user words"
+    "note": "positive — polling-to-push migration, classic event sink use case"
   },
   {
-    "query": "Set up Pexip to POST conference start and end notifications to our webhook URL.",
+    "query": "How do I build a CDR collector that gets Pexip conference_started and participant_disconnected events?",
     "should_trigger": true,
-    "note": "positive — task-oriented, names webhook but not the API resource"
+    "note": "positive — CDR via event sink, explicit event names"
   },
   {
-    "query": "Pull yesterday's call detail records from Pexip.",
+    "query": "The seq field in my Pexip events reset to 1 — what does that mean?",
+    "should_trigger": true,
+    "note": "positive — seq reset = sink restarted, Pexip-specific behavior"
+  },
+  {
+    "query": "How do I use create_event_sink and list_event_sinks in the Pexip MCP server?",
+    "should_trigger": true,
+    "note": "positive — explicit MCP tool names for event sinks"
+  },
+  {
+    "query": "What's the difference between Pexip event sink v1 and v2 protocol?",
+    "should_trigger": true,
+    "note": "positive — protocol version question, Pexip-specific"
+  },
+  {
+    "query": "How do I set up a Pexip webhook so we get notified when calls start and end?",
+    "should_trigger": true,
+    "note": "positive — conference_started/ended webhook"
+  },
+  {
+    "query": "How do I read who is currently in a Pexip conference right now?",
     "should_trigger": false,
-    "note": "negative — post-call CDR pull, belongs to pexip-history-api"
+    "note": "negative — live state read, belongs to pexip-status-api"
   },
   {
-    "query": "How many participants are connected to conference 'sales-allhands' right now?",
+    "query": "How do I get call quality data for a Pexip conference that ended yesterday?",
     "should_trigger": false,
-    "note": "negative — one-off live state read, belongs to pexip-status-api"
+    "note": "negative — post-call history, belongs to pexip-history-api"
   },
   {
-    "query": "Disconnect participant abc-123 from the conference.",
+    "query": "How do I kick a participant from a live Pexip conference?",
     "should_trigger": false,
-    "note": "negative — live operational command, belongs to pexip-operations"
+    "note": "negative — runtime command, belongs to pexip-command-api"
   },
   {
-    "query": "How do I listen for participant join events in my Pexip web client using the JS SDK?",
+    "query": "How do I configure a Cisco RoomOS macro to react to Pexip events?",
     "should_trigger": false,
-    "note": "negative — client-side SDK events (in-browser), belongs to pexip-call-lifecycle / pexip-participants under skills/client/, not the server-side webhook sink"
+    "note": "negative — room system integration, belongs to pexip-room-integration"
   },
   {
-    "query": "How do I register a Cisco endpoint with Pexip so users can dial in from it?",
+    "query": "How do I receive participant events in my PexRTC browser app using onParticipantCreate?",
     "should_trigger": false,
-    "note": "negative — endpoint registration / dial-plan question, not event-driven; belongs to a future call-control / registration skill"
+    "note": "negative — client-side SDK events, belongs to pexip-pexrtc"
   }
 ]

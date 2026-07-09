@@ -1,0 +1,47 @@
+[
+  {
+    "query": "How do I customize the colors and logo in my Pexip webapp?",
+    "should_trigger": true,
+    "note": "positive — color palette + logo via branding manifest"
+  },
+  {
+    "query": "How does the Pexip manifest.json branding system work?",
+    "should_trigger": true,
+    "note": "positive — explicit manifest.json branding"
+  },
+  {
+    "query": "I want to hide certain UI buttons in the Pexip meeting — how do I do that with branding?",
+    "should_trigger": true,
+    "note": "positive — hiddenFunctionality in branding manifest"
+  },
+  {
+    "query": "How do I load the branding manifest in a Pexip webapp using loadBranding?",
+    "should_trigger": true,
+    "note": "positive — explicit loadBranding call"
+  },
+  {
+    "query": "I need to white-label the Pexip meeting app with our company branding",
+    "should_trigger": true,
+    "note": "positive — white-label branding customization"
+  },
+  {
+    "query": "How do I add custom translations to the Pexip webapp for our language?",
+    "should_trigger": true,
+    "note": "positive — availableLanguages + translation customization"
+  },
+  {
+    "query": "How do I build the join flow and meeting state machine in my Pexip app?",
+    "should_trigger": false,
+    "note": "negative — call lifecycle, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "How do I configure VMR themes in the Pexip management API?",
+    "should_trigger": false,
+    "note": "negative — server-side ivr_theme config, belongs to pexip-config-api"
+  },
+  {
+    "query": "How do I add a custom plugin panel to the Pexip meeting UI?",
+    "should_trigger": false,
+    "note": "negative — plugin system, belongs to pexip-plugin-host"
+  }
+]

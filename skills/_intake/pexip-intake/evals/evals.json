@@ -1,0 +1,62 @@
+[
+  {
+    "query": "I want to use Pexip for my company's video conferencing — where do I start?",
+    "should_trigger": true,
+    "note": "positive — open-ended project ask, no specifics, classic intake trigger"
+  },
+  {
+    "query": "We want to automate Pexip — can you help us figure out what to build?",
+    "should_trigger": true,
+    "note": "positive — project-shaped automation ask without specifics"
+  },
+  {
+    "query": "I need to build a Pexip app but I'm not sure if it's server-side or a web client — help me figure out the scope",
+    "should_trigger": true,
+    "note": "positive — explicitly wants scoping before implementation"
+  },
+  {
+    "query": "Set up Pexip for our organisation — we need call reporting, VMR management, and a custom join page",
+    "should_trigger": true,
+    "note": "positive — multi-domain project request, needs intake routing"
+  },
+  {
+    "query": "We want to report on Pexip calls — usage, quality, who joined what",
+    "should_trigger": true,
+    "note": "positive — open-ended reporting project, could be history API or ops, needs scoping"
+  },
+  {
+    "query": "Build a Pexip integration for us — we use Teams and want room systems to join Pexip meetings with one touch",
+    "should_trigger": true,
+    "note": "positive — multi-skill project (MJX, room integration), needs intake to scope"
+  },
+  {
+    "query": "How does summarize_calls work in the Pexip MCP server?",
+    "should_trigger": false,
+    "note": "negative — narrow specific function question, belongs to pexip-history-api"
+  },
+  {
+    "query": "Kick Alice from the standup VMR right now",
+    "should_trigger": false,
+    "note": "negative — narrow operational action, belongs to pexip-operations"
+  },
+  {
+    "query": "How do I use makeCall in PexRTC?",
+    "should_trigger": false,
+    "note": "negative — narrow specific API question, belongs to pexip-pexrtc"
+  },
+  {
+    "query": "What does onPeerDisconnect do in @pexip/infinity?",
+    "should_trigger": false,
+    "note": "negative — narrow specific SDK question, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "How do I configure a VMR in Pexip?",
+    "should_trigger": false,
+    "note": "negative — narrow config task, belongs to pexip-config-api"
+  },
+  {
+    "query": "Show me how to lock a Pexip conference using the command API",
+    "should_trigger": false,
+    "note": "negative — narrow specific command, belongs to pexip-command-api"
+  }
+]

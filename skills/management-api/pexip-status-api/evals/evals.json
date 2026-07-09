@@ -1,0 +1,47 @@
+[
+  {
+    "query": "How do I check which Pexip conferences are active right now?",
+    "should_trigger": true,
+    "note": "positive — live conference list via /api/admin/status/v1/"
+  },
+  {
+    "query": "How do I get the current participant count and state for a live Pexip conference?",
+    "should_trigger": true,
+    "note": "positive — live participant status"
+  },
+  {
+    "query": "How do I monitor Pexip node load and see which Conferencing Nodes are under pressure?",
+    "should_trigger": true,
+    "note": "positive — worker_vm load via status API"
+  },
+  {
+    "query": "How do I check current Pexip alarms and licensing usage?",
+    "should_trigger": true,
+    "note": "positive — alarm + licensing status"
+  },
+  {
+    "query": "How do I get live call quality data for participants in an active Pexip conference?",
+    "should_trigger": true,
+    "note": "positive — participant_call_quality / participant_media_stream status"
+  },
+  {
+    "query": "How do I get call history and CDRs for Pexip conferences from last week?",
+    "should_trigger": false,
+    "note": "negative — post-call history, belongs to pexip-history-api"
+  },
+  {
+    "query": "How do I kick a participant from a live Pexip conference?",
+    "should_trigger": false,
+    "note": "negative — live command action, belongs to pexip-command-api"
+  },
+  {
+    "query": "How do I create a new VMR in Pexip?",
+    "should_trigger": false,
+    "note": "negative — persistent config, belongs to pexip-config-api"
+  },
+  {
+    "query": "How do I monitor WebRTC stats in my Pexip browser client?",
+    "should_trigger": false,
+    "note": "negative — client-side stats, belongs to pexip-stats-monitoring"
+  }
+]

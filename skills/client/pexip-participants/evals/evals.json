@@ -1,0 +1,47 @@
+[
+  {
+    "query": "How do I build a participant list that shows who's in the Pexip meeting?",
+    "should_trigger": true,
+    "note": "positive — roster display using createInMeetingParticipants"
+  },
+  {
+    "query": "How do I mute and kick participants from a Pexip meeting in my app?",
+    "should_trigger": true,
+    "note": "positive — host controls on individual participants"
+  },
+  {
+    "query": "I need to show a waiting room / lobby with admit buttons for incoming guests",
+    "should_trigger": true,
+    "note": "positive — waiting room / lobby admit flow"
+  },
+  {
+    "query": "How do I handle raise hand in my Pexip app and let hosts lower hands?",
+    "should_trigger": true,
+    "note": "positive — buzz/raise-hand participant event handling"
+  },
+  {
+    "query": "How do I filter participants by host vs guest in my Pexip meeting UI?",
+    "should_trigger": true,
+    "note": "positive — GroupKey / role filtering"
+  },
+  {
+    "query": "How do I build the PIN screen and join flow for my Pexip app?",
+    "should_trigger": false,
+    "note": "negative — join flow / auth, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "How do I set up far-end camera control for PTZ cameras in Pexip?",
+    "should_trigger": false,
+    "note": "negative — FECC, belongs to pexip-fecc"
+  },
+  {
+    "query": "How do I change the layout of the Pexip meeting for all participants?",
+    "should_trigger": false,
+    "note": "negative — layout control, belongs to pexip-layouts"
+  },
+  {
+    "query": "How do I kick a participant using the Pexip management command API?",
+    "should_trigger": false,
+    "note": "negative — admin management API, belongs to pexip-command-api"
+  }
+]

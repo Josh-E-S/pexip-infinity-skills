@@ -1,0 +1,37 @@
+[
+  {
+    "query": "How do I show an 'are you sure you want to leave?' prompt when a user closes the tab during a Pexip call?",
+    "should_trigger": true,
+    "note": "positive — beforeunload / browser close confirmation"
+  },
+  {
+    "query": "How do I use useBrowserCloseConfirmation in my Pexip app?",
+    "should_trigger": true,
+    "note": "positive — explicit hook name"
+  },
+  {
+    "query": "Users accidentally close the tab mid-call — how do I prevent that in my Pexip webapp?",
+    "should_trigger": true,
+    "note": "positive — symptom-led, accidental tab close prevention"
+  },
+  {
+    "query": "How do I wire the leave confirmation dialog when someone navigates away from the Pexip meeting page?",
+    "should_trigger": true,
+    "note": "positive — navigation away confirmation"
+  },
+  {
+    "query": "How do I disconnect cleanly when a user leaves a Pexip meeting?",
+    "should_trigger": false,
+    "note": "negative — call disconnect / lifecycle, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "How do I handle network drops and reconnection in my Pexip app?",
+    "should_trigger": false,
+    "note": "negative — reconnect UX, belongs to pexip-reconnect"
+  },
+  {
+    "query": "How do I use the pagehide event to clean up my Pexip session?",
+    "should_trigger": false,
+    "note": "negative — pagehide is the companion in pexip-call-lifecycle, not this skill"
+  }
+]

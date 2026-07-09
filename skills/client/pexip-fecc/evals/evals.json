@@ -1,0 +1,37 @@
+[
+  {
+    "query": "How do I let users pan and tilt another participant's camera in my Pexip app?",
+    "should_trigger": true,
+    "note": "positive — FECC pan/tilt/zoom control"
+  },
+  {
+    "query": "How do I implement far-end camera control for PTZ cameras in Pexip?",
+    "should_trigger": true,
+    "note": "positive — explicit FECC / PTZ"
+  },
+  {
+    "query": "How do I check if a Pexip participant supports FECC before showing the camera controls?",
+    "should_trigger": true,
+    "note": "positive — canFecc / fecc_supported capability check"
+  },
+  {
+    "query": "How do I use the FeccButton component in my Pexip React app?",
+    "should_trigger": true,
+    "note": "positive — explicit FeccButton component"
+  },
+  {
+    "query": "How do I build a participant list with mute and kick controls?",
+    "should_trigger": false,
+    "note": "negative — participant controls, belongs to pexip-participants"
+  },
+  {
+    "query": "How do I control the layout of the Pexip conference from my app?",
+    "should_trigger": false,
+    "note": "negative — layout control, belongs to pexip-layouts"
+  },
+  {
+    "query": "How do I send FECC signals using PexRTC's sendFECC method?",
+    "should_trigger": false,
+    "note": "negative — PexRTC FECC, belongs to pexip-pexrtc"
+  }
+]

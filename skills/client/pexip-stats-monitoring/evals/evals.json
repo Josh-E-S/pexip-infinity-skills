@@ -1,0 +1,42 @@
+[
+  {
+    "query": "How do I show a 'poor connection' warning in my Pexip app?",
+    "should_trigger": true,
+    "note": "positive — onCallQuality / Quality.BAD/TERRIBLE UX"
+  },
+  {
+    "query": "How do I use onRtcStats to monitor WebRTC call quality in Pexip?",
+    "should_trigger": true,
+    "note": "positive — explicit onRtcStats handler"
+  },
+  {
+    "query": "How do I log packet loss and round trip time for Pexip calls?",
+    "should_trigger": true,
+    "note": "positive — NormalizedRTCStats packet loss / roundTripTime"
+  },
+  {
+    "query": "How do I wire @pexip/peer-connection-stats in my Pexip app?",
+    "should_trigger": true,
+    "note": "positive — explicit StatsCollector / peer-connection-stats package"
+  },
+  {
+    "query": "How do I detect when a Pexip participant's video quality degrades due to CPU or bandwidth?",
+    "should_trigger": true,
+    "note": "positive — qualityLimitationReason / fpsVolatility"
+  },
+  {
+    "query": "How do I handle network drops and show a reconnecting UI in Pexip?",
+    "should_trigger": false,
+    "note": "negative — reconnect UX, belongs to pexip-reconnect"
+  },
+  {
+    "query": "How do I get historical call quality reports from the Pexip management API?",
+    "should_trigger": false,
+    "note": "negative — post-call CDR quality data, belongs to pexip-history-api"
+  },
+  {
+    "query": "How do I monitor live call quality on the Pexip server using the status API?",
+    "should_trigger": false,
+    "note": "negative — server-side live monitoring, belongs to pexip-status-api"
+  }
+]

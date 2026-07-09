@@ -1,0 +1,52 @@
+[
+  {
+    "query": "How do I set up audio and video tracks before joining a Pexip call using @pexip/media?",
+    "should_trigger": true,
+    "note": "positive — createMedia setup before infinityClient.call()"
+  },
+  {
+    "query": "How do I let users switch cameras mid-call in my Pexip app?",
+    "should_trigger": true,
+    "note": "positive — device switching via applyConstraints/renegotiate"
+  },
+  {
+    "query": "I want to add background blur to my Pexip video call",
+    "should_trigger": true,
+    "note": "positive — video processor / segmenter in the media pipeline"
+  },
+  {
+    "query": "How do I configure noise suppression and echo cancellation for Pexip audio?",
+    "should_trigger": true,
+    "note": "positive — audio processor configuration"
+  },
+  {
+    "query": "My Pexip app asks for camera/mic permission too late — how do I request it earlier in the flow?",
+    "should_trigger": true,
+    "note": "positive — getUserMedia timing in the media setup layer"
+  },
+  {
+    "query": "How do I change bandwidth limits mid-call in my Pexip app?",
+    "should_trigger": true,
+    "note": "positive — bandwidth configuration via mediaService"
+  },
+  {
+    "query": "How do I build the join flow and PIN screen for my Pexip app?",
+    "should_trigger": false,
+    "note": "negative — join flow / auth, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "How do I show a preview of the user's camera before they join a Pexip meeting?",
+    "should_trigger": false,
+    "note": "negative — pre-call preview UI, belongs to pexip-preflight"
+  },
+  {
+    "query": "How do I wire screen sharing in my Pexip app?",
+    "should_trigger": false,
+    "note": "negative — presentation/screenshare feature, belongs to pexip-presentation"
+  },
+  {
+    "query": "How do I monitor call quality and show a 'poor connection' warning?",
+    "should_trigger": false,
+    "note": "negative — WebRTC stats and quality UX, belongs to pexip-stats-monitoring"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "query": "How do I load and sandbox a plugin iframe in my Pexip webapp?",
+    "should_trigger": true,
+    "note": "positive — plugin iframe loading and sandboxing"
+  },
+  {
+    "query": "How does the Pexip plugin RPC system work for adding toolbar buttons from a plugin?",
+    "should_trigger": true,
+    "note": "positive — RPCCall / ui:button:add plugin API"
+  },
+  {
+    "query": "How do I inject a custom panel widget into the Pexip meeting UI from a plugin?",
+    "should_trigger": true,
+    "note": "positive — ui:widget:add panel injection"
+  },
+  {
+    "query": "How do I use @pexip/plugin-api to show a prompt or form inside a Pexip meeting?",
+    "should_trigger": true,
+    "note": "positive — explicit @pexip/plugin-api, ui:form:open / ui:prompt:open"
+  },
+  {
+    "query": "How do I route RPC calls between the Pexip conference and a plugin?",
+    "should_trigger": true,
+    "note": "positive — conference RPC routing in plugin host"
+  },
+  {
+    "query": "How do I customize the Pexip meeting UI with colors and logos?",
+    "should_trigger": false,
+    "note": "negative — branding manifest, belongs to pexip-branding-manifest"
+  },
+  {
+    "query": "How do I add custom buttons to the Pexip meeting using the branding manifest?",
+    "should_trigger": false,
+    "note": "negative — branding/manifest customization, belongs to pexip-branding-manifest"
+  },
+  {
+    "query": "How do I build breakout rooms in my Pexip app?",
+    "should_trigger": false,
+    "note": "negative — breakout rooms, belongs to pexip-breakouts"
+  }
+]

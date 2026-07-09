@@ -1,0 +1,52 @@
+[
+  {
+    "query": "Kick everyone from the 10am standup VMR — it's stuck",
+    "should_trigger": true,
+    "note": "positive — operational verb 'kick', live conference action"
+  },
+  {
+    "query": "How many Pexip calls happened today and what was the average quality?",
+    "should_trigger": true,
+    "note": "positive — call-volume + quality report via operations layer"
+  },
+  {
+    "query": "Mute all guests in the all-hands conference right now",
+    "should_trigger": true,
+    "note": "positive — operational 'mute everyone' verb"
+  },
+  {
+    "query": "Show me all active Pexip alarms and whether licensing is OK",
+    "should_trigger": true,
+    "note": "positive — platform health check via operations"
+  },
+  {
+    "query": "Lock the board meeting VMR so no new participants can join",
+    "should_trigger": true,
+    "note": "positive — operational lock verb"
+  },
+  {
+    "query": "Create a new VMR called 'Sales Team' with a 4-digit host PIN",
+    "should_trigger": true,
+    "note": "positive — VMR administration via operations"
+  },
+  {
+    "query": "Dial out from the conference to sip:ceo@example.com",
+    "should_trigger": true,
+    "note": "positive — dial-out operational action"
+  },
+  {
+    "query": "How do I modify the pexip-command-api MCP tool to add a new conference control?",
+    "should_trigger": false,
+    "note": "negative — code modification task, belongs to pexip-command-api"
+  },
+  {
+    "query": "How do I add the list_alarms MCP tool to the Pexip MCP server?",
+    "should_trigger": false,
+    "note": "negative — tool development, belongs to pexip-status-api"
+  },
+  {
+    "query": "How do I configure a Pexip gateway routing rule in the management API?",
+    "should_trigger": false,
+    "note": "negative — persistent config development, belongs to pexip-config-api"
+  }
+]

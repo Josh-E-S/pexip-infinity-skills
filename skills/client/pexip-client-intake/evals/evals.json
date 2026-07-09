@@ -1,0 +1,52 @@
+[
+  {
+    "query": "I want to build a Pexip app — where do I start?",
+    "should_trigger": true,
+    "note": "positive — open-ended client project, needs intake scoping"
+  },
+  {
+    "query": "I need to add Pexip video calling to my existing React app — what do I need?",
+    "should_trigger": true,
+    "note": "positive — embedding into existing app, needs SDK choice + feature scoping"
+  },
+  {
+    "query": "We want to integrate Pexip into our mobile app and web portal — help us figure out the architecture",
+    "should_trigger": true,
+    "note": "positive — multi-platform project, definitely needs intake before implementation"
+  },
+  {
+    "query": "Build me a custom video conferencing app using Pexip Infinity",
+    "should_trigger": true,
+    "note": "positive — greenfield app project, needs full scoping"
+  },
+  {
+    "query": "We want to embed Pexip video in our SaaS product — what APIs do we need?",
+    "should_trigger": true,
+    "note": "positive — open-ended embed ask, SDK choice needed"
+  },
+  {
+    "query": "How do I use makeCall in PexRTC to join a conference?",
+    "should_trigger": false,
+    "note": "negative — narrow specific API question, belongs to pexip-pexrtc"
+  },
+  {
+    "query": "How does onPeerDisconnect work and how do I do ICE restart?",
+    "should_trigger": false,
+    "note": "negative — narrow specific SDK behavior, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "My screen share stops when someone else starts presenting — how do I fix that?",
+    "should_trigger": false,
+    "note": "negative — specific presentation bug, belongs to pexip-presentation"
+  },
+  {
+    "query": "How do I configure Pexip VMRs and gateway rules from the management API?",
+    "should_trigger": false,
+    "note": "negative — server-side admin config, belongs to pexip-config-api"
+  },
+  {
+    "query": "How do I set up Pexip event sinks to get webhook notifications?",
+    "should_trigger": false,
+    "note": "negative — server-side event config, belongs to pexip-event-sinks"
+  }
+]

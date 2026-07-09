@@ -1,0 +1,42 @@
+[
+  {
+    "query": "Users get spammed with error toasts every time the network drops briefly in my Pexip app — how do I fix that?",
+    "should_trigger": true,
+    "note": "positive — toast spam suppression during reconnect window, exact scenario from skill description"
+  },
+  {
+    "query": "How do I show a reconnecting banner in my Pexip app when the connection drops?",
+    "should_trigger": true,
+    "note": "positive — NetworkAlert banner / useNetworkState"
+  },
+  {
+    "query": "How do I use useNetworkState to detect when a Pexip call is reconnecting?",
+    "should_trigger": true,
+    "note": "positive — explicit useNetworkState hook"
+  },
+  {
+    "query": "How do I handle onReconnecting and onReconnected events in my Pexip app?",
+    "should_trigger": true,
+    "note": "positive — explicit reconnect event handlers"
+  },
+  {
+    "query": "How do I wire useOnFailedInfinityRequest to handle failed requests in Pexip?",
+    "should_trigger": true,
+    "note": "positive — explicit hook name"
+  },
+  {
+    "query": "How do I handle onPeerDisconnect and do ICE restart in my Pexip app?",
+    "should_trigger": false,
+    "note": "negative — ICE restart is part of the call lifecycle, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "How do I handle network drops and reconnection using PexRTC?",
+    "should_trigger": false,
+    "note": "negative — PexRTC disconnect handling, belongs to pexip-pexrtc"
+  },
+  {
+    "query": "How do I detect poor connection quality in my Pexip app?",
+    "should_trigger": false,
+    "note": "negative — call quality stats, belongs to pexip-stats-monitoring"
+  }
+]

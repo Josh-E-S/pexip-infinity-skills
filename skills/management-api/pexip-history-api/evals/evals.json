@@ -1,0 +1,47 @@
+[
+  {
+    "query": "How do I get a report of all Pexip calls from the last 7 days?",
+    "should_trigger": true,
+    "note": "positive — list_history_conferences with start_time__gte filter"
+  },
+  {
+    "query": "How do I pull Call Detail Records from Pexip for billing purposes?",
+    "should_trigger": true,
+    "note": "positive — CDR / history API"
+  },
+  {
+    "query": "How do I get the disconnect reasons for participants who dropped from Pexip calls?",
+    "should_trigger": true,
+    "note": "positive — disconnect_reason in history participant data"
+  },
+  {
+    "query": "How do I summarize call quality metrics across all Pexip calls this month?",
+    "should_trigger": true,
+    "note": "positive — summarize_calls / bucketed_call_quality"
+  },
+  {
+    "query": "How do I find out how long a specific participant was in a Pexip conference yesterday?",
+    "should_trigger": true,
+    "note": "positive — get_history_participant duration lookup"
+  },
+  {
+    "query": "How do I see who is currently in a Pexip conference right now?",
+    "should_trigger": false,
+    "note": "negative — live state, belongs to pexip-status-api"
+  },
+  {
+    "query": "How do I kick a participant from an ongoing Pexip call?",
+    "should_trigger": false,
+    "note": "negative — live command, belongs to pexip-command-api"
+  },
+  {
+    "query": "How do I check call quality in real time during a Pexip conference?",
+    "should_trigger": false,
+    "note": "negative — live quality data, belongs to pexip-status-api"
+  },
+  {
+    "query": "How do I monitor WebRTC stats in my Pexip web app?",
+    "should_trigger": false,
+    "note": "negative — client-side stats, belongs to pexip-stats-monitoring"
+  }
+]

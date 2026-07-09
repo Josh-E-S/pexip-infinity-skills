@@ -1,0 +1,42 @@
+[
+  {
+    "query": "How do I add live captions to my Pexip web app?",
+    "should_trigger": true,
+    "note": "positive — live captions feature implementation"
+  },
+  {
+    "query": "How do I use onLiveCaptions to render transcription text in my Pexip app?",
+    "should_trigger": true,
+    "note": "positive — explicit onLiveCaptions callback"
+  },
+  {
+    "query": "How do I show interim vs final captions and auto-clear them in Pexip?",
+    "should_trigger": true,
+    "note": "positive — is_final flag + auto-clear timer"
+  },
+  {
+    "query": "How do I use useLiveCaptions and useLiveCaptionsAvailable in my Pexip React app?",
+    "should_trigger": true,
+    "note": "positive — explicit hooks"
+  },
+  {
+    "query": "Live captions disappear when a participant enters a breakout room — how do I reset them?",
+    "should_trigger": true,
+    "note": "positive — breakout-aware caption reset"
+  },
+  {
+    "query": "How do I enable live captions for a participant using PexRTC's showLiveCaptions?",
+    "should_trigger": false,
+    "note": "negative — PexRTC captions, belongs to pexip-pexrtc"
+  },
+  {
+    "query": "How do I enable live captions via the Pexip REST API?",
+    "should_trigger": false,
+    "note": "negative — REST API captions, belongs to pexip-rest-client-api"
+  },
+  {
+    "query": "How do I add real-time transcription to a Pexip conference from the server side?",
+    "should_trigger": false,
+    "note": "negative — server-side captions config, belongs to pexip-event-sinks or pexip-command-api"
+  }
+]

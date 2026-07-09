@@ -1,0 +1,42 @@
+[
+  {
+    "query": "How do I implement breakout rooms in my Pexip webapp?",
+    "should_trigger": true,
+    "note": "positive — breakout room implementation in @pexip/infinity"
+  },
+  {
+    "query": "How do I open and close breakout rooms and assign participants in Pexip?",
+    "should_trigger": true,
+    "note": "positive — meeting.openRooms + participant assignment"
+  },
+  {
+    "query": "How do I implement the ask-for-help flow from a Pexip breakout room?",
+    "should_trigger": true,
+    "note": "positive — breakoutAskForHelp flow"
+  },
+  {
+    "query": "How do participants return to the main room from a Pexip breakout?",
+    "should_trigger": true,
+    "note": "positive — return to main room / onBreakoutEnd"
+  },
+  {
+    "query": "I need to move a participant from one breakout room to another in my Pexip app",
+    "should_trigger": true,
+    "note": "positive — participant transfer between breakout rooms"
+  },
+  {
+    "query": "How do I handle breakout rooms using PexRTC — createBreakout and moveToBreakout?",
+    "should_trigger": false,
+    "note": "negative — PexRTC breakout API, belongs to pexip-pexrtc"
+  },
+  {
+    "query": "How do I transfer a participant between Pexip conferences using the management command API?",
+    "should_trigger": false,
+    "note": "negative — admin command API transfer, belongs to pexip-command-api"
+  },
+  {
+    "query": "How does onTransfer work for direct-media transitions in Pexip?",
+    "should_trigger": false,
+    "note": "negative — onTransfer for direct-media, belongs to pexip-call-lifecycle"
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "query": "How do I add screen sharing to my Pexip web app?",
+    "should_trigger": true,
+    "note": "positive — getDisplayMedia + present() screenshare flow"
+  },
+  {
+    "query": "How do I show the incoming presentation stream from another Pexip participant?",
+    "should_trigger": true,
+    "note": "positive — receiving remote presentation / callSignals.onRemotePresentationStream"
+  },
+  {
+    "query": "The presenter can't see their own shared screen — how do I show it back to them?",
+    "should_trigger": true,
+    "note": "positive — local presenter mirror using localMediaStream, documented gotcha"
+  },
+  {
+    "query": "How do I use the usePresentation hook in my Pexip app?",
+    "should_trigger": true,
+    "note": "positive — explicit usePresentation hook"
+  },
+  {
+    "query": "Screen sharing stops when ICE restart happens — how do I preserve the presentation through reconnect?",
+    "should_trigger": true,
+    "note": "positive — ICE-restart preservation during screenshare"
+  },
+  {
+    "query": "How do I stop screen sharing — is it endPresent() or stopPresenting()?",
+    "should_trigger": true,
+    "note": "positive — endPresent vs stopPresenting disambiguation, documented gotcha"
+  },
+  {
+    "query": "How do I set up audio and video tracks before joining a Pexip call?",
+    "should_trigger": false,
+    "note": "negative — media pipeline, belongs to pexip-media-pipeline"
+  },
+  {
+    "query": "How do I control the conference layout in my Pexip app?",
+    "should_trigger": false,
+    "note": "negative — layout control, belongs to pexip-layouts"
+  },
+  {
+    "query": "How do I present my screen in PexRTC using present('screen')?",
+    "should_trigger": false,
+    "note": "negative — PexRTC screenshare, belongs to pexip-pexrtc"
+  }
+]

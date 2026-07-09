@@ -1,0 +1,42 @@
+[
+  {
+    "query": "How do I change the Pexip conference layout from my web app?",
+    "should_trigger": true,
+    "note": "positive — meeting.changeLayout / setLayout"
+  },
+  {
+    "query": "How do I implement personal layout selection for participants in my Pexip app?",
+    "should_trigger": true,
+    "note": "positive — personal layout via changePersonalLayout"
+  },
+  {
+    "query": "How do I detect whether presentation is in the main video mix in Pexip?",
+    "should_trigger": true,
+    "note": "positive — pres_slot_coords / presentation-in-mix detection"
+  },
+  {
+    "query": "I need to add overlay text to the Pexip layout — how does enable_overlay_text work?",
+    "should_trigger": true,
+    "note": "positive — layout overlay text"
+  },
+  {
+    "query": "How do I fetch the available Pexip layouts and show them as thumbnails?",
+    "should_trigger": true,
+    "note": "positive — availableLayouts + layoutSvgs"
+  },
+  {
+    "query": "How do I change layout using transformLayout in PexRTC?",
+    "should_trigger": false,
+    "note": "negative — PexRTC layout control, belongs to pexip-pexrtc"
+  },
+  {
+    "query": "How do I change conference layout using the Pexip management command API?",
+    "should_trigger": false,
+    "note": "negative — admin command API layout, belongs to pexip-command-api"
+  },
+  {
+    "query": "How does screen sharing affect the Pexip layout?",
+    "should_trigger": false,
+    "note": "negative — presentation/screenshare, belongs to pexip-presentation"
+  }
+]

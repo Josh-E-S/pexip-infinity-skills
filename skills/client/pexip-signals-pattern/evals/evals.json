@@ -1,0 +1,52 @@
+[
+  {
+    "query": "How should I architect event flow in my Pexip app — should I use useState or signals?",
+    "should_trigger": true,
+    "note": "positive — architecture decision between state and signals"
+  },
+  {
+    "query": "How do I use createSignal from @pexip/signal in my Pexip app?",
+    "should_trigger": true,
+    "note": "positive — explicit createSignal usage"
+  },
+  {
+    "query": "What's the difference between behavior, generic, replay, and batched signals in @pexip/signal?",
+    "should_trigger": true,
+    "note": "positive — signal variant decision, core skill content"
+  },
+  {
+    "query": "The remote video stream isn't showing up when the meeting component mounts — it worked before",
+    "should_trigger": true,
+    "note": "positive — behavior vs generic signal timing bug with React mount"
+  },
+  {
+    "query": "How do I group signals by domain in my Pexip app like webapp3 does?",
+    "should_trigger": true,
+    "note": "positive — signal hub architecture pattern"
+  },
+  {
+    "query": "I keep getting 'RangeError: Possible recursive call' in my Pexip signal handlers",
+    "should_trigger": true,
+    "note": "positive — recursive emit gotcha documented in the skill"
+  },
+  {
+    "query": "How do I join a Pexip meeting using infinityClient.call()?",
+    "should_trigger": false,
+    "note": "negative — call setup, belongs to pexip-call-lifecycle"
+  },
+  {
+    "query": "How do I set up participant events and the meeting roster in my Pexip app?",
+    "should_trigger": false,
+    "note": "negative — participant roster implementation, belongs to pexip-participants"
+  },
+  {
+    "query": "How do I configure audio and video tracks before joining a Pexip call?",
+    "should_trigger": false,
+    "note": "negative — media pipeline setup, belongs to pexip-media-pipeline"
+  },
+  {
+    "query": "How do I send chat messages in a Pexip app?",
+    "should_trigger": false,
+    "note": "negative — chat feature, belongs to pexip-chat"
+  }
+]
